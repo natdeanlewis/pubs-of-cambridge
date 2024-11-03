@@ -91,13 +91,11 @@ export default function Map() {
             el.addEventListener('mousedown', () => {
                 updateVisitedStatus(pub._id);
             });
-            
         }
-
     }, [visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
-    if (visitedPubs.includes(pubId)) {
+        if (visitedPubs.includes(pubId)) {
             const response = await fetch(`http://localhost:5050/record/users/remove/67269c96e45eaf3016550af0`, {
                 method: "PATCH",
                 headers: {
@@ -133,6 +131,5 @@ export default function Map() {
             </button>
             <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
-
     )
 }
