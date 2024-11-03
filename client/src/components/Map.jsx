@@ -152,14 +152,14 @@ export default function Map() {
                     className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10'
                     onClick={handleRandomPubClick}
                 >
-                    Pub?
+                    🎲
                 </button>
 
                 <button
                     className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10'
                     onClick={handleResetViewClick}
                 >
-                    Reset view
+                    🏠
                 </button>
             </div>
 
@@ -174,8 +174,8 @@ export default function Map() {
             <div className="absolute inline-flex top-4 right-4">     
                 {pubs.length > 0 &&
                     <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-10'>
-                        Visited: {visitedPubs.length}/{pubs.length}
-                        {visitedPubs.length === pubs.length ? ' 🥳' : ''}
+                        {visitedPubs.length}/{pubs.length} 
+                        {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                     </p>        
                 }
 
