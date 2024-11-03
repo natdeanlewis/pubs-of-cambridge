@@ -1,23 +1,27 @@
 import { useRef, useEffect, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
-import { map } from 'lodash'
 
 export default function Map() {
     const mapRef = useRef()
     const mapContainerRef = useRef()
-    const INITIAL_CENTER = [0.1313, 52.1951]
-    const INITIAL_ZOOM = 12
+    const INITIAL_CENTER = [0.1313, 52.202]
+    const INITIAL_ZOOM = 12.6
+    const INITIAL_PITCH = 0
+    const INITIAL_BEARING = 0
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
     const markers = useRef([]);
+    const lotrMapStyle = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
 
     useEffect(() => {
         mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg'
         mapRef.current = new mapboxgl.Map({
           container: mapContainerRef.current,
-          style:'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft',
+          style: lotrMapStyle,
           center: INITIAL_CENTER,
-          zoom: INITIAL_ZOOM
+          zoom: INITIAL_ZOOM,
+          pitch: INITIAL_PITCH,
+          bearing: INITIAL_BEARING,
         });
         return () => mapRef.current.remove();
     }, []);
@@ -58,9 +62,8 @@ export default function Map() {
 
         for (const pub of pubs) {
             const el = document.createElement('div');
-            el.className = 'group'; // Added 'relative' and 'group' classes
+            el.className = 'group';
         
-            // Set background image based on visited status
             el.style.backgroundImage = visitedPubs.includes(pub._id) ? 'url(cheers_full.png)' : 'url(cheers_empty.png)';
             el.style.width = '40px';
             el.style.height = '40px';
@@ -100,7 +103,6 @@ export default function Map() {
                 updateVisitedStatus(pub._id);
             });
         }
-        
     }, [visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
@@ -129,15 +131,18 @@ export default function Map() {
     const handleButtonClick = () => {
         mapRef.current.flyTo({
             center: INITIAL_CENTER,
-            zoom: INITIAL_ZOOM
+            zoom: INITIAL_ZOOM,
+            pitch: INITIAL_PITCH,
+            bearing: INITIAL_BEARING,
         })
     }
 
     return (
         <div className="relative h-screen">
-            <button className='absolute top-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleButtonClick}>
+            <button className='absolute top-4 left-4 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleButtonClick}>
                 Reset view
             </button>
+            <p className='absolute top-4 right-4 bg-yellow-700 text-white font-bold py-2 px-4 rounded z-10'>Visited: {visitedPubs.length}/{pubs.length}{visitedPubs.length === pubs.length ? ' 🥳' : '' }</p>
             <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
     )
