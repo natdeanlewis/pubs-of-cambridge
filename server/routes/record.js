@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
 });
 
 // This section will help you add a pub's visited status.
-router.patch("/users/:id", async (req, res) => {
+router.patch("/users/add/:id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
     const updates = {
