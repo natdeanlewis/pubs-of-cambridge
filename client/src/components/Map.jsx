@@ -11,6 +11,7 @@ export default function Map() {
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
     const [randomPub, setRandomPub] = useState([]);
+    const [complete, setComplete] = useState([]);
     const markers = useRef([]);
     const lotrMapStyle = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
 
@@ -103,6 +104,8 @@ export default function Map() {
                 updateVisitedStatus(pub._id);
             });
         }
+
+        setComplete(pubs.length === visitedPubs.length)
     }, [pubs, visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
@@ -132,17 +135,19 @@ export default function Map() {
 
     const handleRandomPubClick = () => {
         const unvisitedPubs = pubs.filter((pub) => !visitedPubs.includes(pub._id)).filter((pub) => !visitedPubs.includes(pub._id))
-        const randomChoice = Math.floor(Math.random() * unvisitedPubs.length)
-        const randomPub = unvisitedPubs[randomChoice]
-        
-        setRandomPub(randomPub)
-
-        mapRef.current.flyTo({
-            center: [randomPub.longitude, randomPub.latitude],
-            zoom: 16,
-            pitch: INITIAL_PITCH,
-            bearing: INITIAL_BEARING,
-        });
+        if (!complete) {
+            const randomChoice = Math.floor(Math.random() * unvisitedPubs.length)
+            const randomPub = unvisitedPubs[randomChoice]
+            
+            setRandomPub(randomPub)
+    
+            mapRef.current.flyTo({
+                center: [randomPub.longitude, randomPub.latitude],
+                zoom: 16,
+                pitch: INITIAL_PITCH,
+                bearing: INITIAL_BEARING,
+            });
+        }
     };
       
     return (
@@ -163,10 +168,12 @@ export default function Map() {
                 </button>
             </div>
 
-            {!!randomPub && 
+            {(!!randomPub || complete) && 
             <div className="absolute w-full flex justify-center top-4">
                     <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
-                        How about... The {randomPub.name}?
+                        {complete ? 'Looks like you\'re all done... pub?'
+                        : `How about... The ${randomPub.name}?`}
+                        
                     </div>
             </div>
             }
@@ -175,7 +182,7 @@ export default function Map() {
                 {pubs.length > 0 &&
                     <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-10'>
                         {visitedPubs.length}/{pubs.length} 
-                        {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
+                        {complete ? ' 🥳' : ' 🍻'}
                     </p>        
                 }
 
