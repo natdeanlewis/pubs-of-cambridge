@@ -8,7 +8,8 @@ export default function Map() {
     const INITIAL_CENTER = [0.1313, 52.1951]
     const INITIAL_ZOOM = 12
     const [pubs, setPubs] = useState([]);
-    const [user, setUser] = useState([]);
+    const [visitedPubs, setVisitedPubs] = useState([]);
+    const markers = useRef([]);
 
     useEffect(() => {
         mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg'
@@ -18,23 +19,23 @@ export default function Map() {
           center: INITIAL_CENTER,
           zoom: INITIAL_ZOOM
         });
+        return () => mapRef.current.remove();
+    }, []);
 
-        // const goldenHind = new mapboxgl.Marker({ color: 'green' })
-        // .setLngLat([0.145562, 52.227937])
-        // .addTo(mapRef.current);
+    useEffect(() => {
         async function getPubs() {
             const response = await fetch(`http://localhost:5050/record/pubs`);
             if (!response.ok) {
                 const message = `An error occurred: ${response.statusText}`;
                 console.error(message);
                 return;
-            }
+            }            
             const pubs = await response.json();
-            setPubs(pubs);
+            setPubs(pubs);    
         }
         getPubs();
-
-        async function getUser() {
+    
+        async function getVisitedPubs() {
             const response = await fetch(`http://localhost:5050/record/users/67269c96e45eaf3016550af0`);
             if (!response.ok) {
               const message = `An error occurred: ${response.statusText}`;
@@ -42,99 +43,96 @@ export default function Map() {
               return;
             }
             const user = await response.json();
-            setUser(user);
+            const visitedPubs = user.visited_pub_ids
+            setVisitedPubs(visitedPubs);
         }
-        getUser();
+        getVisitedPubs();
+    }, []);
 
-        async function updateVisitedStatus(pubId) {
-            if (user.visited_pub_ids.includes(pubId)) {
-                console.log('asdfasdf')
-                response = await fetch(`http://localhost:5050/record/users/remove/67269c96e45eaf3016550af0`, {
-                    method: "PATCH",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({"pubId": pubId})
-                  });     
-                } else {
-                response = await fetch(`http://localhost:5050/record/users/67269c96e45eaf3016550af0`, {
-                    method: "PATCH",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({"pubId": pubId})
-                  });
-            }
-        }
-        // const geojson = {
-        //     type: 'FeatureCollection',
-        //     features: [
-        //       {
-        //         type: 'Feature',
-        //         geometry: {
-        //           type: 'Point',
-        //           coordinates: [0.145562, 52.227937]
-        //         },
-        //         properties: {
-        //           message: 'Golden Hind',
-        //           visited: true,
-        //         }
-        //       },
-        //       {
-        //         type: 'Feature',
-        //         geometry: {
-        //           type: 'Point',
-        //           coordinates: [0.136563, 52.222812]
-        //         },
-        //         properties: {
-        //           message: 'Milton Arms',
-        //           visited: false,
-        //         }
-        //       }
-        //     ]
-        // };
+
+       
+    useEffect(() => {
+        if (!mapRef.current) return;
+        markers.current.forEach(marker => marker.remove());
+        markers.current = [];
 
         for (const pub of pubs) {
             const el = document.createElement('div');
             el.className = 'marker';
-            el.style.backgroundImage = user.visited_pub_ids.includes(pub._id) ? 'url(cheers_full.png)' : 'url(cheers_empty.png)';
+            el.style.backgroundImage = visitedPubs.includes(pub._id) ? 'url(cheers_full.png)' : 'url(cheers_empty.png)';
             el.style.width = '50px';
             el.style.height = '50px';
             el.style.backgroundSize = '100%';
             el.style.display = 'block';
             el.style.border = 'none';
             el.style.cursor = 'pointer';
+            
+            const label = document.createElement('div');
+            label.className = 'marker-label';
+            label.textContent = pub.name;
+            label.style.position = 'absolute';
+            label.style.bottom = '-30px';
+            label.style.left = '50%';
+            label.style.transform = 'translateX(-50%)';
+            label.style.backgroundColor = 'white';
+            label.style.padding = '5px';
+            label.style.borderRadius = '3px';
+            label.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.5)';
+            label.style.fontSize = '12px';
+            label.style.whiteSpace = 'nowrap';
 
-            new mapboxgl.Marker(el)
+            el.appendChild(label);
+            const marker = new mapboxgl.Marker(el)
             .setLngLat([pub.longitude, pub.latitude])
-            // .setPopup(
-            //           new mapboxgl.Popup({ offset: 25 }) 
-            //             .setHTML(
-            //               pub.name
-            //             )
-            //         )
             .addTo(mapRef.current);
-                  
-            el.addEventListener('click', () => {
-                updateVisitedStatus(pub._id);
-                window.alert('Marking as visited');
-              });
-        }
-    //   }, [pubs, user]); - make this update on pub or user change but not require refresh like below
-      }, [pubs.length]);
+            
+            markers.current.push(marker);
 
-        const handleButtonClick = () => {
-            mapRef.current.flyTo({
-              center: INITIAL_CENTER,
-              zoom: INITIAL_ZOOM
-            })
-          }
+            el.addEventListener('mousedown', () => {
+                updateVisitedStatus(pub._id);
+            });
+            
+        }
+
+    }, [visitedPubs]);
+
+    async function updateVisitedStatus(pubId) {
+    if (visitedPubs.includes(pubId)) {
+            const response = await fetch(`http://localhost:5050/record/users/remove/67269c96e45eaf3016550af0`, {
+                method: "PATCH",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({"pubId": pubId})
+            });     
+        } else {
+            const response = await fetch(`http://localhost:5050/record/users/67269c96e45eaf3016550af0`, {
+                method: "PATCH",
+                headers: {
+                "Content-Type": "application/json",
+                },
+                body: JSON.stringify({"pubId": pubId})
+            });
+        }
+        const userResponse = await fetch(`http://localhost:5050/record/users/67269c96e45eaf3016550af0`);
+        const userData = await userResponse.json();
+        setVisitedPubs(userData.visited_pub_ids);
+    }
+
+    const handleButtonClick = () => {
+        mapRef.current.flyTo({
+            center: INITIAL_CENTER,
+            zoom: INITIAL_ZOOM
+        })
+    }
+
     return (
-        <>
-        <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={handleButtonClick}>
-            Reset view
-        </button>
-        <div id='map-container' className='h-screen' ref={mapContainerRef}/>
-        </>
+        <div className="relative h-screen"> {/* Container for positioning */}
+            <button className='absolute top-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleButtonClick}>
+                Reset view
+            </button>
+            <div id='map-container' className='h-full' ref={mapContainerRef} />
+        </div>
+
     )
 }
