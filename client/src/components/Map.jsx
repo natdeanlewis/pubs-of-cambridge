@@ -15,7 +15,7 @@ export default function Map() {
         mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg'
         mapRef.current = new mapboxgl.Map({
           container: mapContainerRef.current,
-          style:'mapbox://styles/natdeanlewis/cm30cthrf00tk01qw5nb5buow/draft',
+          style:'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft',
           center: INITIAL_CENTER,
           zoom: INITIAL_ZOOM
         });
@@ -58,40 +58,49 @@ export default function Map() {
 
         for (const pub of pubs) {
             const el = document.createElement('div');
-            el.className = 'marker';
+            el.className = 'group'; // Added 'relative' and 'group' classes
+        
+            // Set background image based on visited status
             el.style.backgroundImage = visitedPubs.includes(pub._id) ? 'url(cheers_full.png)' : 'url(cheers_empty.png)';
-            el.style.width = '50px';
-            el.style.height = '50px';
+            el.style.width = '40px';
+            el.style.height = '40px';
             el.style.backgroundSize = '100%';
-            el.style.display = 'block';
             el.style.border = 'none';
             el.style.cursor = 'pointer';
-            
+        
             const label = document.createElement('div');
-            label.className = 'marker-label';
+            label.className = `
+                absolute 
+                bottom-[-15px] 
+                left-1/2 
+                transform 
+                -translate-x-1/2 
+                bg-white 
+                px-1 
+                rounded 
+                shadow 
+                text-xs 
+                whitespace-nowrap 
+                opacity-0 
+                group-hover:opacity-100 
+                transition-opacity 
+                duration-300
+            `;
             label.textContent = pub.name;
-            label.style.position = 'absolute';
-            label.style.bottom = '-30px';
-            label.style.left = '50%';
-            label.style.transform = 'translateX(-50%)';
-            label.style.backgroundColor = 'white';
-            label.style.padding = '5px';
-            label.style.borderRadius = '3px';
-            label.style.boxShadow = '0 1px 2px rgba(0, 0, 0, 0.5)';
-            label.style.fontSize = '12px';
-            label.style.whiteSpace = 'nowrap';
-
+        
             el.appendChild(label);
-            const marker = new mapboxgl.Marker(el)
-            .setLngLat([pub.longitude, pub.latitude])
-            .addTo(mapRef.current);
             
+            const marker = new mapboxgl.Marker(el)
+                .setLngLat([pub.longitude, pub.latitude])
+                .addTo(mapRef.current);
+        
             markers.current.push(marker);
-
+        
             el.addEventListener('mousedown', () => {
                 updateVisitedStatus(pub._id);
             });
         }
+        
     }, [visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
@@ -125,7 +134,7 @@ export default function Map() {
     }
 
     return (
-        <div className="relative h-screen"> {/* Container for positioning */}
+        <div className="relative h-screen">
             <button className='absolute top-4 left-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleButtonClick}>
                 Reset view
             </button>
