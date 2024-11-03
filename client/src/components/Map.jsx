@@ -103,7 +103,7 @@ export default function Map() {
                 updateVisitedStatus(pub._id);
             });
         }
-    }, [visitedPubs]);
+    }, [pubs, visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
         const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
@@ -137,10 +137,12 @@ export default function Map() {
             >
                 Reset view
             </button>
-            <p className='absolute top-4 right-4 bg-yellow-700 text-white font-bold py-2 px-4 rounded z-10'>
-                Visited: {visitedPubs.length}/{pubs.length}
-                {visitedPubs.length === pubs.length ? ' 🥳' : ''}
-            </p>
+            {pubs.length > 0 &&
+                <p className='absolute top-4 right-4 bg-yellow-700 text-white font-bold py-2 px-4 rounded z-10'>
+                    Visited: {visitedPubs.length}/{pubs.length}
+                    {visitedPubs.length === pubs.length ? ' 🥳' : ''}
+                </p>        
+            }
             <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
     );
