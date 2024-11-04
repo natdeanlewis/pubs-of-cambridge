@@ -11,6 +11,7 @@ const INITIAL_MAP_SETTINGS = {
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
 const API_URL = 'http://localhost:5050/record';
 const USER_ID = '67269c96e45eaf3016550af0';
+let firstTime = true;
 
 export default function Map() {
     const mapRef = useRef();
@@ -21,8 +22,8 @@ export default function Map() {
     const [visitedPubs, setVisitedPubs] = useState([]);
     const [randomPub, setRandomPub] = useState(null);
     const [nearestPub, setNearestPub] = useState(null);
-    const [complete, setComplete] = useState(false);
-    const [music, setMusic] = useState(false);
+    const [complete, setComplete] = useState(null);
+    const [music, setMusic] = useState(null);
     const [message, setMessage] = useState(null);
 
     useEffect(() => {
@@ -63,7 +64,7 @@ export default function Map() {
     }, []);
 
     useEffect(() => {
-        if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+        if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
             playSound('applause.mp3');
         }
     }, [visitedPubs]);
@@ -125,6 +126,7 @@ export default function Map() {
     const updateVisitedStatus = async (pubId) => {
         const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
         playSound(method === 'remove' ? 'glass_break.mp3' : 'glass_clink.mp3');
+        firstTime = false;
 
         await fetch(`${API_URL}/users/${method}/${USER_ID}`, {
             method: "PATCH",
@@ -141,7 +143,7 @@ export default function Map() {
 
     const handleResetViewClick = () => {
         playSound('zoom_out.mp3');
-        setComplete(false);
+        setComplete(null);
         setRandomPub(null);
         setNearestPub(null);
         setMessage(null)
@@ -155,15 +157,14 @@ export default function Map() {
         playSound('die_roll.mp3');
         if (unvisitedPubs.length === 0) {
             mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
-            return;
-        };
-
-        const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
-        setRandomPub(randomPub);
-        mapRef.current.flyTo({
-            center: [randomPub.longitude, randomPub.latitude],
-            zoom: 16,
-        });
+        } else {
+            const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
+            setRandomPub(randomPub);
+            mapRef.current.flyTo({
+                center: [randomPub.longitude, randomPub.latitude],
+                zoom: 16,
+            });
+        }
     };
 
     function calculateNearestPub(position) {
