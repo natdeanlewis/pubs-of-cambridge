@@ -211,16 +211,16 @@ export default function Map() {
     return (
         <div className="relative h-screen">
             <div className="absolute inline-flex top-4 left-4">
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleRandomPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-20' onClick={handleRandomPubClick}>
                     🎲
                 </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleNearestPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-20' onClick={handleNearestPubClick}>
                     📍
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleResetViewClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleResetViewClick}>
                     🏠
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleMusicClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
                 <audio id='music' loop>
@@ -231,7 +231,7 @@ export default function Map() {
 
             {randomPub && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
+                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
                         How about... The {randomPub.name}?
                     </div>
                 </div>
@@ -239,7 +239,7 @@ export default function Map() {
 
             {(complete && !nearestPub && !randomPub) &&
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
+                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
                         Looks like you're all done... pub?
                     </div>
                 </div>
@@ -247,7 +247,7 @@ export default function Map() {
 
             {nearestPub && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
+                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
                         Your nearest pub is... The {nearestPub.name}
                     </div>
                 </div>
@@ -255,7 +255,7 @@ export default function Map() {
 
             <div className="absolute inline-flex top-4 right-4">
                 {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-10'>
+                    <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-20'>
                         {visitedPubs.length}/{pubs.length} 
                         {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                     </p>
