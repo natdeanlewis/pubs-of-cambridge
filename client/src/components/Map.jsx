@@ -12,8 +12,16 @@ export default function Map() {
     const [visitedPubs, setVisitedPubs] = useState([]);
     const [randomPub, setRandomPub] = useState([]);
     const [complete, setComplete] = useState([]);
+    const [music, setMusic] = useState(false);
+
     const markers = useRef([]);
     const lotrMapStyle = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
+
+    useEffect(() => {
+        if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+            playSound('applause.mp3')
+        }
+    }, [visitedPubs])
 
     useEffect(() => {
         async function getPubs() {
@@ -110,6 +118,7 @@ export default function Map() {
 
     async function updateVisitedStatus(pubId) {
         const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
+        playSound(method === 'remove' ? 'glass_break.mp3' : 'glass_clink.mp3');
         const response = await fetch(`http://localhost:5050/record/users/${method}/67269c96e45eaf3016550af0`, {
             method: "PATCH",
             headers: {
@@ -124,6 +133,7 @@ export default function Map() {
     }
 
     const handleResetViewClick = () => {
+        playSound('zoom_out.mp3')
         setComplete(null)
         setRandomPub(null)
         mapRef.current.flyTo({
@@ -139,6 +149,8 @@ export default function Map() {
 
         const unvisitedPubs = pubs.filter((pub) => !visitedPubs.includes(pub._id)).filter((pub) => !visitedPubs.includes(pub._id))
         if (!(pubs.length > 0 && pubs.length === visitedPubs.length)) {
+            playSound('die_roll.mp3')
+
             const randomChoice = Math.floor(Math.random() * unvisitedPubs.length)
             const randomPub = unvisitedPubs[randomChoice]
             
@@ -152,7 +164,25 @@ export default function Map() {
             });
         }
     };
-      
+
+    const handleMusicClick = () => {
+        const audio = document.getElementById('music');
+
+        if (!music) {
+            audio.play();
+            setMusic(true);
+        } else {
+            audio.pause();
+            setMusic(false)
+        }
+    }
+    
+        function playSound(file) {
+            const audio = new Audio(file);
+            audio.play();
+            return audio;
+        }
+
     return (
         <div className="relative h-screen">
             <div className="absolute inline-flex top-4 left-4">     
@@ -162,6 +192,17 @@ export default function Map() {
                 >
                     🎲
                 </button>
+
+                <button
+                    className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10'
+                    onClick={handleMusicClick}
+                >
+                    {!music ? '🎵' : '🔇'}
+                </button>
+                <audio id='music' loop>
+                    <source src='lute.mp3'>
+                    </source>
+                </audio>
 
                 <button
                     className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10'
@@ -185,7 +226,7 @@ export default function Map() {
                 {pubs.length > 0 &&
                     <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-10'>
                         {visitedPubs.length}/{pubs.length} 
-                        {complete ? ' 🥳' : ' 🍻'}
+                        {pubs.length > 0 && pubs.length === visitedPubs.length ? ' 🥳' : ' 🍻'}
                     </p>        
                 }
 
