@@ -22,6 +22,7 @@ export default function Map() {
     const [visitedPubs, setVisitedPubs] = useState([]);
     const [randomPub, setRandomPub] = useState(null);
     const [nearestPub, setNearestPub] = useState(null);
+    const [loading, setLoading] = useState(null);
     const [complete, setComplete] = useState(null);
     const [music, setMusic] = useState(null);
     const [message, setMessage] = useState(null);
@@ -63,11 +64,7 @@ export default function Map() {
         fetchVisitedPubs();
     }, []);
 
-    useEffect(() => {
-        if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
-            playSound('applause.mp3');
-        }
-    }, [visitedPubs]);
+
 
     useEffect(() => {
         if (!mapRef.current) return;
@@ -85,7 +82,7 @@ export default function Map() {
             el.addEventListener('mousedown', () => updateVisitedStatus(pub._id));
         });
 
-        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
+        setComplete(null);
         setNearestPub(null);
         setRandomPub(null);
         setMessage(null);
@@ -95,14 +92,23 @@ export default function Map() {
     }, [pubs, visitedPubs]);
 
     useEffect(() => {
+        if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
+            playSound('applause.mp3');
+        }
+    }, [visitedPubs]);
+
+    useEffect(() => {
         if (randomPub) {
             setMessage(`How about... The ${randomPub.name}?`)
         } else if (nearestPub) {
             setMessage(`Your nearest pub is... The ${nearestPub.name}`)
+            setLoading(false);
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`)
+        } else if (loading) {
+            setMessage(`Looking for pubs near you...`)
         }
-    }, [randomPub, nearestPub, complete]);
+    }, [randomPub, nearestPub, complete, loading]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
@@ -116,7 +122,7 @@ export default function Map() {
         el.style.cursor = 'pointer';
     
         const label = document.createElement('div');
-        label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-white px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300';
+        label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif';
         label.textContent = `The ${pub.name}`;
     
         el.appendChild(label);
@@ -151,6 +157,7 @@ export default function Map() {
     };
 
     const handleRandomPubClick = () => {
+        setLoading(null);
         setNearestPub(null)
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
@@ -187,6 +194,7 @@ export default function Map() {
     const handleNearestPubClick = () => {
         setComplete(null);
         setRandomPub(null);
+        setLoading(true);
         if (pubs.length === 0) return;
     
         if (navigator.geolocation) {
@@ -224,7 +232,7 @@ export default function Map() {
 
     const handleInfoClick = () => {
         alert('Welcome!\n\n'
-            + '🍻 Click a pub to mark it as visited.\n'
+            + '🍻 Click a pub to mark it as visited\n'
             + '🎲 Recommends a random unvisited pub\n'
             + '📍 Shows your nearest pub\n'
             + '🏠 Resets the view\n'
@@ -234,16 +242,16 @@ export default function Map() {
     return (
         <div className="relative h-screen">
             <div className="absolute inline-flex top-4 left-4">
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-20' onClick={handleRandomPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-20' onClick={handleRandomPubClick}>
                     🎲
                 </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-20' onClick={handleNearestPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-20' onClick={handleNearestPubClick}>
                     📍
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleResetViewClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleResetViewClick}>
                     🏠
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleMusicClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
                 <audio id='music' loop>
@@ -253,18 +261,18 @@ export default function Map() {
 
             {message && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
+                    <div className='m-16 py-2 px-4 z-20 bg-yellow-700 rounded text-white font-bold font-serif'>
                         {message}
                     </div>
                 </div>
             }
        
             <div className="absolute inline-flex top-4 right-4">
-            <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleInfoClick}>
+            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleInfoClick}>
             ℹ️
             </button>
                 {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-20'>
+                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-20 font-serif	'>
                         {visitedPubs.length}/{pubs.length} 
                         {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                     </p>
