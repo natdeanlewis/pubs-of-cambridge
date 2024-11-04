@@ -84,6 +84,8 @@ export default function Map() {
         });
 
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
+        setNearestPub(null);
+        setRandomPub(null);
     }, [pubs, visitedPubs]);
 
     const createMarkerElement = (pub) => {
