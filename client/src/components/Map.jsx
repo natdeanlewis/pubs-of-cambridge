@@ -28,18 +28,6 @@ export default function Map() {
     const [message, setMessage] = useState(null);
 
     useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg';
-        
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: MAP_STYLE,
-            ...INITIAL_MAP_SETTINGS,
-        });
-
-        return () => mapRef.current.remove();
-    }, []);
-
-    useEffect(() => {
         const fetchPubs = async () => {
             const response = await fetch(`${API_URL}/pubs`);
             if (!response.ok) {
@@ -62,6 +50,16 @@ export default function Map() {
 
         fetchPubs();
         fetchVisitedPubs();
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg';
+        
+        mapRef.current = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: MAP_STYLE,
+            ...INITIAL_MAP_SETTINGS,
+        });
+
+        return () => mapRef.current.remove();
     }, []);
 
 
@@ -82,14 +80,13 @@ export default function Map() {
             el.addEventListener('mousedown', () => updateVisitedStatus(pub._id));
         });
 
-        setComplete(null);
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
-        setMessage(null);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
         }
-    }, [pubs, visitedPubs]);
+    }, [visitedPubs]);
 
     useEffect(() => {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
@@ -107,6 +104,8 @@ export default function Map() {
             setMessage(`Looks like you're all done... pub?`)
         } else if (loading) {
             setMessage(`Looking for pubs near you...`)
+        } else {
+            setMessage(null);
         }
     }, [randomPub, nearestPub, complete, loading]);
 
@@ -133,7 +132,7 @@ export default function Map() {
         const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
         playSound(method === 'remove' ? 'glass_break.mp3' : 'glass_clink.mp3');
         firstTime = false;
-
+        
         await fetch(`${API_URL}/users/${method}/${USER_ID}`, {
             method: "PATCH",
             headers: {
@@ -152,12 +151,11 @@ export default function Map() {
         setComplete(null);
         setRandomPub(null);
         setNearestPub(null);
-        setMessage(null)
+        setMessage(null);
         mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
     };
 
     const handleRandomPubClick = () => {
-        setLoading(null);
         setNearestPub(null)
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
