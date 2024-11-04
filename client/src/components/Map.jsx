@@ -85,7 +85,7 @@ export default function Map() {
             el.addEventListener('mousedown', () => updateVisitedStatus(pub._id));
         });
 
-        setComplete(null);
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
         setMessage(null);
@@ -205,7 +205,6 @@ export default function Map() {
             });
         } 
     };
-    
 
     const handleMusicClick = () => {
         const audio = document.getElementById('music');
@@ -220,6 +219,16 @@ export default function Map() {
     const playSound = (file) => {
         const audio = new Audio(file);
         audio.play();
+    };
+
+
+    const handleInfoClick = () => {
+        alert('Welcome!\n\n'
+            + '🍻 Click a pub to mark it as visited.\n'
+            + '🎲 Recommends a random unvisited pub\n'
+            + '📍 Shows your nearest pub\n'
+            + '🏠 Resets the view\n'
+            + '🎵 Toggles the music')
     };
 
     return (
@@ -240,7 +249,6 @@ export default function Map() {
                 <audio id='music' loop>
                     <source src='lute.mp3' />
                 </audio>
-
             </div>
 
             {message && 
@@ -252,6 +260,9 @@ export default function Map() {
             }
        
             <div className="absolute inline-flex top-4 right-4">
+            <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-20' onClick={handleInfoClick}>
+            ℹ️
+            </button>
                 {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-20'>
                         {visitedPubs.length}/{pubs.length} 
