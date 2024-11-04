@@ -98,12 +98,12 @@ export default function Map() {
         if (randomPub) {
             setMessage(`How about... The ${randomPub.name}?`)
         } else if (nearestPub) {
-            setMessage(`Your nearest pub is... The ${nearestPub.name}`)
+            setMessage(`Your nearest pub is... The ${nearestPub.name}!`)
             setLoading(false);
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`)
         } else if (loading) {
-            setMessage(`Looking for pubs near you...`)
+            setMessage(`Finding your nearest pub...`)
         } else {
             setMessage(null);
         }
@@ -259,7 +259,8 @@ export default function Map() {
 
             {message && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 bg-yellow-700 rounded text-white font-bold font-serif'>
+                    <div className='m-16 py-2 px-4 z-20 rounded text-neutral-800 font-bold font-serif'
+                    style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         {message}
                     </div>
                 </div>
@@ -269,15 +270,15 @@ export default function Map() {
             <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleInfoClick}>
             ℹ️
             </button>
-                {pubs.length > 0 && (
+            {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-20 font-serif	'>
-                        {visitedPubs.length}/{pubs.length} 
-                        {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
-                    </p>
-                )}
-            </div>
+                    {visitedPubs.length}/{pubs.length} 
+                    {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
+                </p>
+            )}
+        </div>
 
-            <div id='map-container' className='h-full' ref={mapContainerRef} />
+        <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
     );
 }
