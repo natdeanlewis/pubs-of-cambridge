@@ -228,7 +228,7 @@ export default function Map() {
                 </div>
             }
 
-            {complete && 
+            {(complete && !nearestPub && !randomPub) &&
                 <div className="absolute w-full flex justify-center top-4">
                     <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
                         Looks like you're all done... pub?
