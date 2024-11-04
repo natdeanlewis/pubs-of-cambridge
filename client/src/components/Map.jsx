@@ -23,6 +23,7 @@ export default function Map() {
     const [nearestPub, setNearestPub] = useState(null);
     const [complete, setComplete] = useState(false);
     const [music, setMusic] = useState(false);
+    const [message, setMessage] = useState(null);
 
     useEffect(() => {
         mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg';
@@ -86,10 +87,21 @@ export default function Map() {
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
+        setMessage(null);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
         }
     }, [pubs, visitedPubs]);
+
+    useEffect(() => {
+        if (randomPub) {
+            setMessage(`How about... The ${randomPub.name}?`)
+        } else if (nearestPub) {
+            setMessage(`Your nearest pub is... The ${nearestPub.name}`)
+        } else if (complete) {
+            setMessage(`Looks like you're all done... pub?`)
+        }
+    }, [randomPub, nearestPub, complete]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
@@ -132,6 +144,7 @@ export default function Map() {
         setComplete(false);
         setRandomPub(null);
         setNearestPub(null);
+        setMessage(null)
         mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
     };
 
@@ -229,30 +242,14 @@ export default function Map() {
 
             </div>
 
-            {randomPub && 
+            {message && 
                 <div className="absolute w-full flex justify-center top-4">
                     <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
-                        How about... The {randomPub.name}?
+                        {message}
                     </div>
                 </div>
             }
-
-            {(complete && !nearestPub && !randomPub) &&
-                <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
-                        Looks like you're all done... pub?
-                    </div>
-                </div>
-            }
-
-            {nearestPub && 
-                <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 bg-neutral-800 rounded text-white font-bold'>
-                        Your nearest pub is... The {nearestPub.name}
-                    </div>
-                </div>
-            }
-
+       
             <div className="absolute inline-flex top-4 right-4">
                 {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-neutral-800 py-2 px-4 rounded z-20'>
