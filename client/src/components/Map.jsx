@@ -86,6 +86,9 @@ export default function Map() {
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
+        if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+            mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
+        }
     }, [pubs, visitedPubs]);
 
     const createMarkerElement = (pub) => {
@@ -211,15 +214,16 @@ export default function Map() {
                 <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleNearestPubClick}>
                     📍
                 </button>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleResetViewClick}>
+                    🏠
+                </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
                 <audio id='music' loop>
                     <source src='lute.mp3' />
                 </audio>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleResetViewClick}>
-                    🏠
-                </button>
+
             </div>
 
             {randomPub && 
