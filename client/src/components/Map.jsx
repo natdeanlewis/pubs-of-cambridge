@@ -25,7 +25,7 @@ export default function Map() {
             const pubs = await response.json();
             setPubs(pubs);
         }
-        
+
         async function getVisitedPubs() {
             const response = await fetch(`http://localhost:5050/record/users/67269c96e45eaf3016550af0`);
             if (!response.ok) {
@@ -104,8 +104,8 @@ export default function Map() {
                 updateVisitedStatus(pub._id);
             });
         }
-
-        setComplete(pubs.length === visitedPubs.length)
+        
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length)
     }, [pubs, visitedPubs]);
 
     async function updateVisitedStatus(pubId) {
@@ -124,6 +124,7 @@ export default function Map() {
     }
 
     const handleResetViewClick = () => {
+        setComplete(null)
         setRandomPub(null)
         mapRef.current.flyTo({
             center: INITIAL_CENTER,
@@ -134,8 +135,10 @@ export default function Map() {
     };
 
     const handleRandomPubClick = () => {
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length)
+
         const unvisitedPubs = pubs.filter((pub) => !visitedPubs.includes(pub._id)).filter((pub) => !visitedPubs.includes(pub._id))
-        if (!complete) {
+        if (!(pubs.length > 0 && pubs.length === visitedPubs.length)) {
             const randomChoice = Math.floor(Math.random() * unvisitedPubs.length)
             const randomPub = unvisitedPubs[randomChoice]
             
