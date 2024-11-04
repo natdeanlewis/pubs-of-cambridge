@@ -20,6 +20,7 @@ export default function Map() {
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
     const [randomPub, setRandomPub] = useState(null);
+    const [nearestPub, setNearestPub] = useState(null);
     const [complete, setComplete] = useState(false);
     const [music, setMusic] = useState(false);
 
@@ -125,14 +126,17 @@ export default function Map() {
         playSound('zoom_out.mp3');
         setComplete(false);
         setRandomPub(null);
+        setNearestPub(null);
         mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
     };
 
     const handleRandomPubClick = () => {
+        setNearestPub(null)
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
+        playSound('die_roll.mp3');
         if (unvisitedPubs.length === 0) return;
 
-        playSound('die_roll.mp3');
         const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
         setRandomPub(randomPub);
         mapRef.current.flyTo({
@@ -140,6 +144,46 @@ export default function Map() {
             zoom: 16,
         });
     };
+
+    function calculateNearestPub(position) {
+        let minDistance = Infinity;
+        let nearestPub = null;
+    
+        pubs.forEach(pub => {
+            const distance = Math.pow(pub.latitude - position.coords.latitude, 2) + Math.pow(pub.longitude - position.coords.longitude, 2);
+        
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestPub = pub;
+            }
+        });
+    
+        setNearestPub(nearestPub);
+        return nearestPub;
+    }
+    
+    const handleNearestPubClick = () => {
+        setComplete(null);
+        setRandomPub(null);
+        if (pubs.length === 0) return;
+    
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const nearestPub = calculateNearestPub(position);
+                playSound('door.mp3');
+    
+                if (nearestPub) {
+                    mapRef.current.flyTo({
+                        center: [nearestPub.longitude, nearestPub.latitude],
+                        zoom: 16,
+                    });
+                }
+            }, (error) => {
+                console.error('Error getting location:', error);
+            });
+        } 
+    };
+    
 
     const handleMusicClick = () => {
         const audio = document.getElementById('music');
@@ -162,6 +206,9 @@ export default function Map() {
                 <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleRandomPubClick}>
                     🎲
                 </button>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 text-white font-bold py-2 px-4 rounded z-10' onClick={handleNearestPubClick}>
+                    📍
+                </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded z-10' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
@@ -173,10 +220,26 @@ export default function Map() {
                 </button>
             </div>
 
-            {(randomPub || complete) && 
+            {randomPub && 
                 <div className="absolute w-full flex justify-center top-4">
                     <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
-                        {complete ? 'Looks like you\'re all done... pub?' : `How about... The ${randomPub.name}?`}
+                        How about... The {randomPub.name}?
+                    </div>
+                </div>
+            }
+
+            {complete && 
+                <div className="absolute w-full flex justify-center top-4">
+                    <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
+                        Looks like you're all done... pub?
+                    </div>
+                </div>
+            }
+
+            {nearestPub && 
+                <div className="absolute w-full flex justify-center top-4">
+                    <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
+                        Your nearest pub... The {nearestPub.name}
                     </div>
                 </div>
             }
