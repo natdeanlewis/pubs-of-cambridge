@@ -93,7 +93,7 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
-        el.className = 'group';
+        el.className = 'group hover:z-10';
         el.style.backgroundImage = visitedPubs.includes(pub._id) 
             ? 'url(cheers_full.png)' 
             : 'url(cheers_empty.png)';
@@ -101,11 +101,11 @@ export default function Map() {
         el.style.height = '40px';
         el.style.backgroundSize = '100%';
         el.style.cursor = 'pointer';
-
+    
         const label = document.createElement('div');
         label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-white px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300';
         label.textContent = `The ${pub.name}`;
-
+    
         el.appendChild(label);
         return el;
     };
