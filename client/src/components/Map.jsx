@@ -85,7 +85,7 @@ export default function Map() {
             el.addEventListener('mousedown', () => updateVisitedStatus(pub._id));
         });
 
-        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
+        setComplete(null);
         setNearestPub(null);
         setRandomPub(null);
         setMessage(null);
