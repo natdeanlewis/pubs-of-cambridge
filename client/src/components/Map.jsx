@@ -104,7 +104,7 @@ export default function Map() {
 
         const label = document.createElement('div');
         label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-white px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300';
-        label.textContent = pub.name;
+        label.textContent = `The ${pub.name}`;
 
         el.appendChild(label);
         return el;
@@ -248,7 +248,7 @@ export default function Map() {
             {nearestPub && 
                 <div className="absolute w-full flex justify-center top-4">
                     <div className='m-16 py-2 px-4 z-10 bg-neutral-800 rounded text-white font-bold'>
-                        Your nearest pub... The {nearestPub.name}
+                        Your nearest pub is... The {nearestPub.name}
                     </div>
                 </div>
             }
