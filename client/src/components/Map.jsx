@@ -140,7 +140,10 @@ export default function Map() {
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
         playSound('die_roll.mp3');
-        if (unvisitedPubs.length === 0) return;
+        if (unvisitedPubs.length === 0) {
+            mapRef.current.flyTo(INITIAL_MAP_SETTINGS);
+            return;
+        };
 
         const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
         setRandomPub(randomPub);
