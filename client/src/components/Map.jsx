@@ -259,7 +259,7 @@ export default function Map() {
 
             {message && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 rounded text-neutral-800 font-bold font-serif'
+                    <div className='m-16 py-2 px-4 z-20 rounded text-neutral-800 font-bold font-serif italic'
                     style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         {message}
                     </div>
@@ -271,7 +271,7 @@ export default function Map() {
             ℹ️
             </button>
             {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-20 font-serif	'>
+                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-20 font-serif'>
                     {visitedPubs.length}/{pubs.length} 
                     {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                 </p>
