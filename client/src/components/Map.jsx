@@ -58,6 +58,29 @@ export default function Map() {
             style: MAP_STYLE,
             ...INITIAL_MAP_SETTINGS,
         });
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const userMarker = document.createElement('div');
+                userMarker.className = 'group hover:z-20';
+                userMarker.style.zIndex = '10';
+        
+                userMarker.innerHTML = `
+                    <span class="relative flex items-center justify-center text-2xl">
+                        <span class="animate-ping absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
+                        <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
+                    </span>
+                `;
+                const label = document.createElement('div');
+                label.className = 'absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif';
+                label.textContent = `You!`;
+            
+                userMarker.appendChild(label);
+                
+                new mapboxgl.Marker(userMarker)
+                    .setLngLat([position.coords.longitude, position.coords.latitude])
+                    .addTo(mapRef.current);
+            });
+        }
 
         return () => mapRef.current.remove();
     }, []);
@@ -111,7 +134,7 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
-        el.className = 'group hover:z-10';
+        el.className = 'group hover:z-20';
         el.style.backgroundImage = visitedPubs.includes(pub._id) 
             ? 'url(cheers_full.png)' 
             : 'url(cheers_empty.png)';
@@ -229,7 +252,7 @@ export default function Map() {
 
 
     const handleInfoClick = () => {
-        alert('Welcome!\n\n'
+        alert('Welcome, traveller!\n\n'
             + '🍻 Click a pub to mark it as visited\n'
             + '🎲 Recommends a random unvisited pub\n'
             + '📍 Shows your nearest pub\n'
@@ -240,16 +263,16 @@ export default function Map() {
     return (
         <div className="relative h-screen">
             <div className="absolute inline-flex top-4 left-4">
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-20' onClick={handleRandomPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleRandomPubClick}>
                     🎲
                 </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-20' onClick={handleNearestPubClick}>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleNearestPubClick}>
                     📍
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleResetViewClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleResetViewClick}>
                     🏠
                 </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleMusicClick}>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
                 <audio id='music' loop>
@@ -259,7 +282,7 @@ export default function Map() {
 
             {message && 
                 <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-20 rounded text-neutral-800 font-bold font-serif italic'
+                    <div className='m-16 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic'
                     style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         {message}
                     </div>
@@ -267,11 +290,11 @@ export default function Map() {
             }
        
             <div className="absolute inline-flex top-4 right-4">
-            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-20' onClick={handleInfoClick}>
+            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleInfoClick}>
             ℹ️
             </button>
             {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-20 font-serif'>
+                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-30 font-serif'>
                     {visitedPubs.length}/{pubs.length} 
                     {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                 </p>
