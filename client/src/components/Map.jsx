@@ -152,12 +152,25 @@ export default function Map() {
         el.style.height = '40px';
         el.style.backgroundSize = '100%';
         el.style.cursor = 'pointer';
-    
+
         const label = document.createElement('div');
         label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic';
         label.textContent = `The ${pub.name}`;
     
         el.appendChild(label);
+        
+        const updateLabelOpacity = () => {
+            const zoom = mapRef.current.getZoom();
+            if (zoom > 15) {
+                label.style.opacity = '1';
+            } else {
+                label.style.opacity = null;
+            }
+        };
+
+        updateLabelOpacity();
+
+        mapRef.current.on('zoom', updateLabelOpacity);
         return el;
     };
 
@@ -272,47 +285,47 @@ export default function Map() {
 
     return (
         <div className="relative h-screen">
-            <div className="absolute inline-flex top-4 left-4">
+                <div className="absolute inline-flex top-4 left-4">
                 <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleRandomPubClick}>
-                    🎲
-                </button>
+                        🎲
+                    </button>
                 <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleNearestPubClick}>
-                    📍
-                </button>
+                        📍
+                    </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleResetViewClick}>
-                    🏠
-                </button>
+                        🏠
+                    </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleMusicClick}>
-                    {music ? '🔇' : '🎵'}
-                </button>
-                <audio id='music' loop>
-                    <source src='lute.mp3' />
-                </audio>
-            </div>
-
-            {message && 
-                <div className="absolute w-full flex justify-center top-4">
-                    <div className='m-16 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic'
-                    style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                        {message}
-                    </div>
+                        {music ? '🔇' : '🎵'}
+                    </button>
+                    <audio id='music' loop>
+                        <source src='lute.mp3' />
+                    </audio>
                 </div>
-            }
-       
-            <div className="absolute inline-flex top-4 right-4">
 
-            {pubs.length > 0 && (
+                {message && 
+                    <div className="absolute w-full flex justify-center top-4">
+                    <div className='m-16 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic'
+                        style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                            {message}
+                        </div>
+                    </div>
+                }
+            
+                <div className="absolute inline-flex top-4 right-4">
+
+                    {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-30 font-serif'>
-                    <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
-                    {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
-                </p>
-            )}
+                            <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
+                            {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
+                        </p>
+                    )}
             <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleInfoClick}>
-                ℹ️
-            </button>
-        </div>
+                        ℹ️
+                    </button>
+                </div>
 
-        <div id='map-container' className='h-full' ref={mapContainerRef} />
+            <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
     );
 }
