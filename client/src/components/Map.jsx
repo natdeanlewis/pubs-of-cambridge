@@ -117,20 +117,31 @@ export default function Map() {
         }
     }, [visitedPubs]);
 
-    useEffect(() => {
+    useEffect(() => {    
         if (randomPub) {
-            setMessage(`How about... The ${randomPub.name}?`)
+            setMessage(`How about... The ${randomPub.name}?`);
         } else if (nearestPub) {
-            setMessage(`Your nearest pub is... The ${nearestPub.name}!`)
+            setMessage(`Your nearest pub is... The ${nearestPub.name}!`);
             setLoading(false);
         } else if (complete) {
-            setMessage(`Looks like you're all done... pub?`)
+            setMessage(`Looks like you're all done... pub?`);
         } else if (loading) {
-            setMessage(`Finding your nearest pub...`)
+            setMessage(`Finding your nearest pub...`);
         } else {
             setMessage(null);
         }
-    }, [randomPub, nearestPub, complete, loading]);
+
+        if (!loading) {
+            const messageTimeout = setTimeout(() => {
+                setMessage(null);
+                setComplete(null);
+            }, 3000);
+        
+            return () => {
+                clearTimeout(messageTimeout);   
+            };    
+        }
+        }, [randomPub, nearestPub, complete, loading]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
