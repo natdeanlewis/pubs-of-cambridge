@@ -62,11 +62,11 @@ export default function Map() {
             navigator.geolocation.getCurrentPosition((position) => {
                 const userMarker = document.createElement('div');
                 userMarker.className = 'group hover:z-20';
-                userMarker.style.zIndex = '10';
+                userMarker.style.zIndex = '20';
         
                 userMarker.innerHTML = `
                     <span class="relative flex items-center justify-center text-2xl">
-                        <span class="animate-ping absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
+                         <span class="animate-ping absolute inline-flex rounded-full">👑</span>
                         <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
                     </span>
                 `;
@@ -103,7 +103,7 @@ export default function Map() {
             el.addEventListener('mousedown', () => updateVisitedStatus(pub._id));
         });
 
-        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
+        setComplete(!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
@@ -134,7 +134,7 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
-        el.className = 'group hover:z-20';
+        el.className = 'group hover:z-10';
         el.style.backgroundImage = visitedPubs.includes(pub._id) 
             ? 'url(cheers_full.png)' 
             : 'url(cheers_empty.png)';
