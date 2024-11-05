@@ -114,7 +114,7 @@ export default function Map() {
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
         }
-    }, [visitedPubs]);
+    }, [pubs, visitedPubs]);
 
     useEffect(() => {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
@@ -245,7 +245,7 @@ export default function Map() {
         setComplete(null);
         setRandomPub(null);
         if (pubs.length === 0) return;
-    
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setLoading(true);
