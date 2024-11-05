@@ -62,7 +62,7 @@ export default function Map() {
             navigator.geolocation.getCurrentPosition((position) => {
                 const userMarker = document.createElement('div');
                 userMarker.className = 'group hover:z-20';
-                userMarker.style.zIndex = '20';
+                userMarker.style.zIndex = '10';
         
                 userMarker.innerHTML = `
                     <span class="relative flex items-center justify-center text-2xl">
@@ -145,7 +145,7 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
-        el.className = 'group hover:z-10';
+        el.className = 'group hover:z-20';
         el.style.backgroundImage = visitedPubs.includes(pub._id) 
             ? 'url(cheers_full.png)' 
             : 'url(cheers_empty.png)';
