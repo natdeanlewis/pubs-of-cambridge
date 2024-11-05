@@ -35,7 +35,8 @@ export default function Map() {
                 return;
             }
             const data = await response.json();
-            setPubs(data);
+            const pubs = data.sort((a, b) => a.latitude - b.latitude);
+            setPubs(pubs);
         };
 
         const fetchVisitedPubs = async () => {
