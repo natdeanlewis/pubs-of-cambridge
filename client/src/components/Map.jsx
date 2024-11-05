@@ -70,7 +70,7 @@ export default function Map() {
                     </span>
                 `;
                 const label = document.createElement('div');
-                label.className = 'absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif';
+                label.className = 'absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic';
                 label.textContent = `You!`;
             
                 userMarker.appendChild(label);
@@ -154,7 +154,7 @@ export default function Map() {
         el.style.cursor = 'pointer';
     
         const label = document.createElement('div');
-        label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif';
+        label.className = 'absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic';
         label.textContent = `The ${pub.name}`;
     
         el.appendChild(label);
@@ -303,7 +303,7 @@ export default function Map() {
 
             {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-30 font-serif'>
-                    {visitedPubs.length}/{pubs.length} 
+                    <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
                     {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                 </p>
             )}
