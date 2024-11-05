@@ -1,11 +1,17 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 
+const INITIAL_LATIUDE = 52.202
+const INITIAL_LONGITUDE = 0.1313
 const INITIAL_MAP_SETTINGS = {
-    center: [0.1313, 52.202],
+    center: [INITIAL_LONGITUDE, INITIAL_LATIUDE],
     zoom: 12.6,
     pitch: 0,
     bearing: 0,
+    maxZoom: 20,
+    maxPitch: 0,
+    bearingSnap: 180,
+    maxBounds: [[INITIAL_LONGITUDE - 0.3, INITIAL_LATIUDE - 0.1], [INITIAL_LONGITUDE + 0.3, INITIAL_LATIUDE + 0.1]]
 };
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
