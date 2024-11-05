@@ -9,7 +9,7 @@ const INITIAL_MAP_SETTINGS = {
 };
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
-const API_URL = 'http://localhost:5050/record';
+const API_URL = import.meta.env.VITE_API_URL;
 const USER_ID = '67269c96e45eaf3016550af0';
 let firstTime = true;
 
