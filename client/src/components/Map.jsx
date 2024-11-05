@@ -293,45 +293,45 @@ export default function Map() {
 
     return (
         <div className="relative h-screen">
-                <div className="absolute inline-flex top-4 left-4">
-                    <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleRandomPubClick}>
-                            🎲
-                    </button>
-                    <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleNearestPubClick}>
-                            📍
-                    </button>
-                    <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleResetViewClick}>
-                            🏠
-                    </button>
-                    <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleMusicClick}>
-                            {music ? '🔇' : '🎵'}
-                    </button>
-                    <audio id='music' loop>
-                        <source src='lute.mp3' />
-                    </audio>
-                </div>
+            <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleRandomPubClick}>
+                    🎲
+                </button>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleNearestPubClick}>
+                    📍
+                </button>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleResetViewClick}>
+                    🏠
+                </button>
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleMusicClick}>
+                    {music ? '🔇' : '🎵'}
+                </button>
+            </div>
 
-                {message && 
-                    <div className="absolute w-full flex justify-center top-4 text-center">
+            <audio id='music' loop>
+                <source src='lute.mp3' />
+            </audio>
+
+            {message && 
+                <div className="absolute w-full flex justify-center top-4 text-center">
                     <div className='m-16 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic'
                         style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                            {message}
-                        </div>
+                        {message}
                     </div>
-                }
-            
-                <div className="absolute inline-flex top-4 right-4">
-
-                    {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-30 font-serif'>
-                            <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
-                            {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
-                        </p>
-                    )}
-            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleInfoClick}>
-                        ℹ️
-                    </button>
                 </div>
+            }
+
+            <div className="absolute inline-flex top-4 right-4 z-30">
+                {pubs.length > 0 && (
+                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded font-serif'>
+                        <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
+                        {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
+                    </p>
+                )}
+                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleInfoClick}>
+                    ℹ️
+                </button>
+            </div>
 
             <div id='map-container' className='h-full' ref={mapContainerRef} />
         </div>
