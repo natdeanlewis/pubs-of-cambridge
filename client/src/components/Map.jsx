@@ -51,8 +51,7 @@ export default function Map() {
         fetchPubs();
         fetchVisitedPubs();
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoibmF0ZGVhbmxld2lzIiwiYSI6ImNtMzBjcWpkNjBpaXgybXNhdGYyYTU2Y3AifQ.lM4WFOgR19cbYIGR5seCCg';
-        
+        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
             style: MAP_STYLE,
