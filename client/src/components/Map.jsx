@@ -300,15 +300,16 @@ export default function Map() {
             }
        
             <div className="absolute inline-flex top-4 right-4">
-            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleInfoClick}>
-            ℹ️
-            </button>
+
             {pubs.length > 0 && (
                     <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded z-30 font-serif'>
                     {visitedPubs.length}/{pubs.length} 
                     {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                 </p>
             )}
+            <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleInfoClick}>
+                ℹ️
+            </button>
         </div>
 
         <div id='map-container' className='h-full' ref={mapContainerRef} />
