@@ -132,7 +132,7 @@ export default function Map() {
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`);
         } else if (loading) {
-            setMessage(`Finding your nearest pub...`);
+            setMessage(`Looking for your nearest pub...`);
         } else {
             setMessage(null);
         }
