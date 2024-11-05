@@ -294,17 +294,17 @@ export default function Map() {
     return (
         <div className="relative h-screen">
                 <div className="absolute inline-flex top-4 left-4">
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleRandomPubClick}>
-                        🎲
+                    <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleRandomPubClick}>
+                            🎲
                     </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleNearestPubClick}>
-                        📍
+                    <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded z-30' onClick={handleNearestPubClick}>
+                            📍
                     </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleResetViewClick}>
-                        🏠
+                    <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleResetViewClick}>
+                            🏠
                     </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleMusicClick}>
-                        {music ? '🔇' : '🎵'}
+                    <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded z-30' onClick={handleMusicClick}>
+                            {music ? '🔇' : '🎵'}
                     </button>
                     <audio id='music' loop>
                         <source src='lute.mp3' />
@@ -312,7 +312,7 @@ export default function Map() {
                 </div>
 
                 {message && 
-                    <div className="absolute w-full flex justify-center top-4">
+                    <div className="absolute w-full flex justify-center top-4 text-center">
                     <div className='m-16 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic'
                         style={{ backgroundImage: `url('parchment.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             {message}
