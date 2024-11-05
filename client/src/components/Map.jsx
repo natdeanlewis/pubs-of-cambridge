@@ -245,11 +245,12 @@ export default function Map() {
     const handleNearestPubClick = () => {
         setComplete(null);
         setRandomPub(null);
-        setLoading(true);
         if (pubs.length === 0) return;
     
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
+                setLoading(true);
+                
                 const nearestPub = calculateNearestPub(position);
                 playSound('door.mp3');
     
@@ -261,8 +262,9 @@ export default function Map() {
                 }
             }, (error) => {
                 console.error('Error getting location:', error);
+                alert('Share your location to enable finding your nearest pub');
             });
-        } 
+        }
     };
 
     const handleMusicClick = () => {
