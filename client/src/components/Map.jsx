@@ -273,7 +273,7 @@ export default function Map() {
     };
 
     return (
-        <div className="relative h-screen">
+        <div className="relative h-dvh">
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleRandomPubClick}>
                     🎲
@@ -320,7 +320,7 @@ export default function Map() {
                 </button>
             </div>
 
-            <div id='map-container' className='h-screen' ref={mapContainerRef} />
+            <div id='map-container' className="h-dvh" ref={mapContainerRef} />
         </div>
     );
 }
