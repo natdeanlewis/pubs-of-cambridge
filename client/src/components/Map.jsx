@@ -329,7 +329,7 @@ export default function Map() {
     };
 
     return (
-        <div className="relative h-dvh">
+        <div className="relative h-dvh w-dvw">
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleResetViewClick}>
                     🏠
@@ -377,7 +377,7 @@ export default function Map() {
                 </button>
             </div>
 
-            <div id='map-container' className="h-dvh" ref={mapContainerRef} />
+            <div id='map-container' className="h-dvh w-dvw" ref={mapContainerRef} />
         </div>
     );
 }
