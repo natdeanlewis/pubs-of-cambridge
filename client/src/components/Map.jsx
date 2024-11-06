@@ -32,65 +32,49 @@ export default function Map() {
     const [music, setMusic] = useState(null);
     const [message, setMessage] = useState(null);
 
-    useEffect(() => {
-        const fetchPubs = async () => {
-            const response = await fetch(`${API_URL}/pubs`);
-            if (!response.ok) {
-                console.error(`An error occurred: ${response.statusText}`);
-                return;
-            }
-            const data = await response.json();
-            const pubs = data.sort((a, b) => a.latitude - b.latitude);
-            setPubs(pubs);
-        };
-
-        const fetchVisitedPubs = async () => {
-            const response = await fetch(`${API_URL}/users/${USER_ID}`);
-            if (!response.ok) {
-                console.error(`An error occurred: ${response.statusText}`);
-                return;
-            }
-            const userData = await response.json();
-            setVisitedPubs(userData.visited_pub_ids);
-        };
-
-        fetchPubs();
-        fetchVisitedPubs();
-
-        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
-        mapRef.current = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: MAP_STYLE,
-            ...INITIAL_MAP_SETTINGS,
-        });
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                const userMarker = document.createElement('div');
-                userMarker.className = 'group hover:z-20';
-                userMarker.style.zIndex = '10';
-        
-                userMarker.innerHTML = `
-                    <span class="relative flex items-center justify-center text-2xl">
-                         <span class="animate-ping absolute inline-flex rounded-full">👑</span>
-                        <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
-                    </span>
-                `;
-                const label = document.createElement('div');
-                label.className = 'absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic';
-                label.textContent = `You!`;
-            
-                userMarker.appendChild(label);
-                
-                new mapboxgl.Marker(userMarker)
-                    .setLngLat([position.coords.longitude, position.coords.latitude])
-                    .addTo(mapRef.current);
-            });
+    const fetchPubs = async () => {
+        const response = await fetch(`${API_URL}/pubs`);
+        if (!response.ok) {
+            console.error(`An error occurred: ${response.statusText}`);
+            return;
         }
+        const data = await response.json();
+        const pubs = data.sort((a, b) => a.latitude - b.latitude);
+        setPubs(pubs);
+    };
 
-        return () => mapRef.current.remove();
+    const fetchVisitedPubs = async () => {
+        const response = await fetch(`${API_URL}/users/${USER_ID}`);
+        if (!response.ok) {
+            console.error(`An error occurred: ${response.statusText}`);
+            return;
+        }
+        const userData = await response.json();
+        setVisitedPubs(userData.visited_pub_ids);
+    };
+
+    useEffect(() => {
+        const initMap = async () => {
+            mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
+            mapRef.current = new mapboxgl.Map({
+                container: mapContainerRef.current,
+                style: MAP_STYLE,
+                ...INITIAL_MAP_SETTINGS,
+            });
+        };
+
+        const initialize = async () => {
+            await Promise.all([fetchPubs(), fetchVisitedPubs(), initMap()]);
+        };
+
+        initialize();
+
+        return () => {
+            if (mapRef.current) {
+                mapRef.current.remove();
+            }
+        };
     }, []);
-
-
 
     useEffect(() => {
         if (!mapRef.current) return;
@@ -136,17 +120,15 @@ export default function Map() {
             setMessage(null);
         }
 
-        if (!loading) {
-            const messageTimeout = setTimeout(() => {
-                setMessage(null);
-                setComplete(null);
-            }, 3000);
-        
-            return () => {
-                clearTimeout(messageTimeout);   
-            };    
-        }
-        }, [randomPub, nearestPub, complete, loading]);
+        const messageTimeout = setTimeout(() => {
+            setMessage(null);
+            setComplete(null);
+        }, 3000);
+    
+        return () => {
+            clearTimeout(messageTimeout);   
+        };    
+    }, [randomPub, nearestPub, complete, loading]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
@@ -244,11 +226,10 @@ export default function Map() {
     const handleNearestPubClick = () => {
         setComplete(null);
         setRandomPub(null);
+        setLoading(true);
         if (pubs.length === 0) return;
-
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
-                setLoading(true);
                 
                 const nearestPub = calculateNearestPub(position);
                 playSound('door.mp3');
@@ -339,7 +320,7 @@ export default function Map() {
                 </button>
             </div>
 
-            <div id='map-container' className='h-full' ref={mapContainerRef} />
+            <div id='map-container' className='h-screen' ref={mapContainerRef} />
         </div>
     );
 }
