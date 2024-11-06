@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 
+const MAPBOX_USAGE_LIMIT = 50000
 const INITIAL_LATIUDE = 52.202
 const INITIAL_LONGITUDE = 0.1313
 const INITIAL_MAP_SETTINGS = {
@@ -80,7 +81,7 @@ export default function Map() {
     useEffect(() => {
         if (loadCount === null) {
             return
-        } else if (loadCount > 0.9 * import.meta.env.MAPBOX_USAGE_LIMIT) {
+        } else if (loadCount > Math.round(0.9 * MAPBOX_USAGE_LIMIT)) {
             alert('Service Unavailable')
         } else {
             updateLoadCount();
