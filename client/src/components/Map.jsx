@@ -220,9 +220,18 @@ export default function Map() {
 
     const updateVisitedStatus = async (pubId) => {
         const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
-        playSound(method === 'remove' ? 'glass_break.mp3' : 'glass_clink.mp3');
+        let newVisitedPubs
+        if (method === 'remove') {
+            newVisitedPubs = visitedPubs.filter(id => id !== pubId);
+            playSound('glass_break.mp3')
+        } else {
+            newVisitedPubs = [...visitedPubs, pubId];
+            playSound('glass_clink.mp3')
+        }
+        setVisitedPubs(newVisitedPubs);
+
         firstTime = false;
-        
+
         await fetch(`${API_URL}/users/${method}/${USER_ID}`, {
             method: "PATCH",
             headers: {
@@ -233,7 +242,10 @@ export default function Map() {
 
         const response = await fetch(`${API_URL}/users/${USER_ID}`);
         const userData = await response.json();
-        setVisitedPubs(userData.visited_pub_ids);
+
+        if (!userData.visited_pub_ids.sort().every((element, index) => element === newVisitedPubs.sort()[index])) {
+            setVisitedPubs(userData.visited_pub_ids);
+        }
     };
 
     const handleResetViewClick = () => {
