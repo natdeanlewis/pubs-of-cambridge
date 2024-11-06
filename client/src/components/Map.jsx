@@ -76,7 +76,7 @@ export default function Map() {
 
     useEffect(() => {
         fetchLoadCount();
-      }, []);
+    }, []);
     
     useEffect(() => {
         if (loadCount === null) {
