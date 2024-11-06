@@ -205,7 +205,7 @@ export default function Map() {
         
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
-            if (zoom > 13) {
+            if (zoom > 13.5) {
                 label.style.opacity = '1';
             } else {
                 label.style.opacity = null;
