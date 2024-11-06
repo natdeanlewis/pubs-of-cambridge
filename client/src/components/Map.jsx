@@ -31,6 +31,7 @@ export default function Map() {
     const [complete, setComplete] = useState(null);
     const [music, setMusic] = useState(null);
     const [message, setMessage] = useState(null);
+    const [loadCount, setLoadCount] = useState(null);
 
     const fetchPubs = async () => {
         const response = await fetch(`${API_URL}/pubs`);
@@ -53,28 +54,58 @@ export default function Map() {
         setVisitedPubs(userData.visited_pub_ids);
     };
 
+    const fetchLoadCount = async () => {
+        const response = await fetch(`${API_URL}/load_count`);
+        if (!response.ok) {
+            console.error(`An error occurred: ${response.statusText}`);
+            return;
+        }
+        const load_count_record = await response.json();
+        setLoadCount(load_count_record.load_count)
+    }
+
+    const updateLoadCount = async () => {
+        await fetch(`${API_URL}/load_count`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    };
+
     useEffect(() => {
-        const initMap = async () => {
-            mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
-            mapRef.current = new mapboxgl.Map({
-                container: mapContainerRef.current,
-                style: MAP_STYLE,
-                ...INITIAL_MAP_SETTINGS,
-            });
+        fetchLoadCount();
+      }, []);
+    
+    useEffect(() => {
+        if (loadCount === null) {
+            return
+        } else if (loadCount > 0.9 * import.meta.env.MAPBOX_USAGE_LIMIT) {
+            alert('Service Unavailable')
+        } else {
+            updateLoadCount();
+            const initMap = async () => {
+                mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
+                mapRef.current = new mapboxgl.Map({
+                    container: mapContainerRef.current,
+                    style: MAP_STYLE,
+                    ...INITIAL_MAP_SETTINGS,
+                });
+            };
+    
+            const initialize = async () => {
+                await Promise.all([fetchPubs(), fetchVisitedPubs(), initMap()]);
+            };
+    
+            initialize();
+    
+            return () => {
+                if (mapRef.current) {
+                    mapRef.current.remove();
+                }
+            };
         };
-
-        const initialize = async () => {
-            await Promise.all([fetchPubs(), fetchVisitedPubs(), initMap()]);
-        };
-
-        initialize();
-
-        return () => {
-            if (mapRef.current) {
-                mapRef.current.remove();
-            }
-        };
-    }, []);
+    }, [loadCount]);
 
     useEffect(() => {
         if (!mapRef.current) return;
