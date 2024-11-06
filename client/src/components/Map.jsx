@@ -299,7 +299,7 @@ export default function Map() {
         alert('Welcome, traveller!\n\n'
             + '🍻 Click a pub to mark it as visited\n'
             + '🎲 Recommends a random unvisited pub\n'
-            + '📍 Shows your nearest pub\n'
+            + '📍 Finds your nearest pub\n'
             + '🏠 Resets the view\n'
             + '🎵 Toggles the music')
     };
@@ -307,18 +307,19 @@ export default function Map() {
     return (
         <div className="relative h-dvh">
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleRandomPubClick}>
-                    🎲
-                </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleNearestPubClick}>
-                    📍
-                </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleResetViewClick}>
                     🏠
                 </button>
                 <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleMusicClick}>
                     {music ? '🔇' : '🎵'}
                 </button>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleRandomPubClick}>
+                    🎲
+                </button>
+                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleNearestPubClick}>
+                    📍
+                </button>
+
             </div>
 
             <audio id='music' loop>
