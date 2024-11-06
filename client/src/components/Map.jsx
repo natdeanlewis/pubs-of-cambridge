@@ -155,7 +155,7 @@ export default function Map() {
         const messageTimeout = setTimeout(() => {
             setMessage(null);
             setComplete(null);
-        }, 3000);
+        }, 5000);
     
         return () => {
             clearTimeout(messageTimeout);   
