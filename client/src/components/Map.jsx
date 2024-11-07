@@ -357,21 +357,14 @@ export default function Map() {
                 </button>
 
             </div>
-
+            
             <audio id='music' loop>
                 <source src='lute.mp3' />
             </audio>
 
             {message && (
                 <div className="absolute w-full flex justify-center text-center bottom-12 sm:top-12 sm:bottom-auto">
-                    <div
-                        className="m-8 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic"
-                        style={{
-                            backgroundImage: `url('parchment.jpg')`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                        }}
-                    >
+                    <div className="bg-amber-100 shadow m-8 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic text-balance">
                         {message}
                     </div>
                 </div>
