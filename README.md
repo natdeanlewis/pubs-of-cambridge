@@ -8,7 +8,7 @@ run client locally from /client:
 
 npm run dev
 
-run db server locally from root:
+run db server locally from /server:
 
 node --env-file=config.env server
 
