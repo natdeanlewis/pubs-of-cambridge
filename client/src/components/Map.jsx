@@ -2,8 +2,8 @@ import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 
 const MAPBOX_USAGE_LIMIT = 50000
-const INITIAL_LATIUDE = 52.204
-const INITIAL_LONGITUDE = 0.133
+const INITIAL_LATIUDE = 52.205
+const INITIAL_LONGITUDE = 0.137
 const INITIAL_MAP_SETTINGS = {
     bounds: [[INITIAL_LONGITUDE - 0.045, INITIAL_LATIUDE - 0.045], [INITIAL_LONGITUDE + 0.045, INITIAL_LATIUDE + 0.045]],
     pitch: 0,
