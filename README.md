@@ -23,4 +23,4 @@ react frontend is hosted on vercel at https://pubsofcambridge.vercel.app/
 
 counts calls to mapbox to avoid exceeding the limit. currently not doing this monthly, so must be reset in mongodb to the current month's calls (from mapbox dashboard) if we exceed the limit
 
-an uptime robot pings the render server every 5 mins to stop it spinning down https://dashboard.uptimerobot.com/monitors/797982073
+an uptime robot http monitor sends a request to the render server every 10 mins to stop it spinning down https://dashboard.uptimerobot.com/monitors/797982851
