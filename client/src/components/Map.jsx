@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
+import Button from './Button';
 
 const MAPBOX_USAGE_LIMIT = 50000
 const INITIAL_LATIUDE = 52.2027
@@ -343,19 +344,10 @@ export default function Map() {
     return (
         <div className="relative h-dvh">
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleResetViewClick}>
-                    🏠
-                </button>
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleMusicClick}>
-                    {music ? '🔇' : '🎵'}
-                </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleRandomPubClick}>
-                    🎲
-                </button>
-                <button className='m-2 bg-yellow-700 hover:bg-yellow-900 py-2 px-4 rounded' onClick={handleNearestPubClick}>
-                    📍
-                </button>
-
+                <Button label="🏠" handleClickAction={handleResetViewClick} />
+                <Button label={music ? "🔇" : "🎵"} handleClickAction={handleMusicClick} />
+                <Button label="🎲" handleClickAction={handleRandomPubClick} style="brown" />
+                <Button label="📍" handleClickAction={handleNearestPubClick} style="brown" />
             </div>
             
             <audio id='music' loop>
@@ -377,9 +369,7 @@ export default function Map() {
                         {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
                     </p>
                 )}
-                <button className='m-2 bg-gray-500 hover:bg-gray-700 py-2 px-4 rounded' onClick={handleInfoClick}>
-                    ℹ️
-                </button>
+                <Button label="ℹ️" handleClickAction={handleInfoClick} />
             </div>
 
             <div id='map-container' className="h-dvh" ref={mapContainerRef} />
