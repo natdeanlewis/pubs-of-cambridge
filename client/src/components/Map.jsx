@@ -30,6 +30,8 @@ export default function Map() {
     const [loading, setLoading] = useState(null);
     const [complete, setComplete] = useState(null);
     const [music, setMusic] = useState(null);
+    const [creditsMusic, setCreditsMusic] = useState(null);
+
     const [message, setMessage] = useState(null);
     const [loadCount, setLoadCount] = useState(null);
 
@@ -255,8 +257,18 @@ export default function Map() {
         setNearestPub(null)
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const audio = document.getElementById('credits');
-            audio.play()
+            const credits = document.getElementById('credits');
+            const audio = document.getElementById('music');
+
+            if (creditsMusic) {
+                credits.pause();
+            } else {
+                audio.pause();
+                setMusic(false);
+                credits.play();
+            }
+            setCreditsMusic(!creditsMusic);
+
         } else {
             const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
             playSound('die_roll.mp3');
@@ -316,9 +328,12 @@ export default function Map() {
 
     const handleMusicClick = () => {
         const audio = document.getElementById('music');
+        const credits = document.getElementById('credits');
         if (music) {
             audio.pause();
         } else {
+            credits.pause();
+            setCreditsMusic(false);
             audio.play();
         }
         setMusic(!music);
@@ -344,7 +359,7 @@ export default function Map() {
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <Button label="🏠" handleClickAction={handleResetViewClick} />
                 <Button label={music ? "🔇" : "🎵"} handleClickAction={handleMusicClick} />
-                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? "🐬": "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
+                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? (creditsMusic ? "🔇" : "🐬") : "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
                 <Button label="📍" handleClickAction={handleNearestPubClick} style="brown" />
             </div>
             
