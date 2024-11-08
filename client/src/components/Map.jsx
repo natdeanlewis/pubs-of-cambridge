@@ -159,6 +159,13 @@ export default function Map() {
 
     useEffect(() => {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
+            const audio = document.getElementById('music');
+            if (music) {
+                audio.muted = true;   
+                setTimeout(() => {
+                    audio.muted = false;
+                }, 3000) 
+            }
             playSound('fanfare.mp3');
             playSound('applause.mp3');
         }
@@ -243,7 +250,7 @@ export default function Map() {
         setRandomPub(null);
         setNearestPub(null);
         setMessage(null);
-        // mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+        mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
     };
 
     const handleRandomPubClick = () => {
@@ -252,7 +259,7 @@ export default function Map() {
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
         playSound('die_roll.mp3');
         if (unvisitedPubs.length === 0) {
-            // mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
         } else {
             const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
             setRandomPub(randomPub);
