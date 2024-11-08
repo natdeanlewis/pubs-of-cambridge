@@ -391,20 +391,29 @@ export default function Map() {
                     mapRef.current.flyTo({center: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoom: 0, duration: 352000});
                 }, 500);
             }
-
-
         } else {
-            const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
             playSound('die_roll.mp3');
-            if (unvisitedPubs.length === 0) {
+            let unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
+            if (randomPub) {
+                unvisitedPubs = unvisitedPubs.filter(pub => pub._id != randomPub._id)
+            }
+            if (!randomPub && unvisitedPubs.length === 0) {
                 mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
             } else {
-                const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
-                setRandomPub(randomPub);
-                mapRef.current.flyTo({
-                    center: [randomPub.longitude, randomPub.latitude],
-                    zoom: 16,
-                });
+                if (unvisitedPubs.length === 0) {
+                    console.log(randomPub)
+                    mapRef.current.flyTo({
+                        center: [randomPub.longitude, randomPub.latitude],
+                        zoom: 16,
+                    });    
+                } else {
+                    const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
+                    setRandomPub(randomPub);
+                    mapRef.current.flyTo({
+                        center: [randomPub.longitude, randomPub.latitude],
+                        zoom: 16,
+                    });
+                }
             }
         }
     };
