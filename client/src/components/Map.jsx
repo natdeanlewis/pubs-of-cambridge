@@ -268,6 +268,7 @@ export default function Map() {
                 credits.play();
             }
             setCreditsMusic(!creditsMusic);
+            mapRef.current.flyTo({center: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoom: 1, duration: 352000})
 
         } else {
             const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
