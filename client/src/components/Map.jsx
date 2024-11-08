@@ -15,7 +15,7 @@ const INITIAL_MAP_SETTINGS = {
 };
 const creditsBeatLength = 60000/122.36
 const creditsMessages =[
-    'Well, here we are at last...',
+    '(Sound on!) Well, here we are at last...',
     'Just look at all those pubs...',
     'More to the point, think of all those drinks!',
     'It\'s been a long journey...',
@@ -216,13 +216,13 @@ export default function Map() {
                     case (i === 3 ):
                         timeout += 17 * creditsBeatLength;
                         break;
-                    case (i === 9 ):
+                    case (i === 10 ):
                         timeout += 20 * creditsBeatLength;
                         break;
-                    case (i === 20 ):
+                    case (i === 21 ):
                         timeout += 8 * creditsBeatLength;
                         break;
-                    case (i === 21 ):
+                    case (i === 22 ):
                         timeout += 9 * creditsBeatLength;
                         break;
                     default:
