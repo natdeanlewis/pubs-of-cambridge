@@ -13,6 +13,32 @@ const INITIAL_MAP_SETTINGS = {
     maxPitch: 0,
     bearingSnap: 180,
 };
+const creditsBeatLength = 60000/122.36
+const creditsMessages =[
+    'Well, here we are at last...',
+    'Just look at all those pubs...',
+    'More to the point, think of all those drinks!',
+    'It\'s been a long journey...',
+    'But there\'s a whole world out there...',
+    'What on earth have you been doing?!',
+    'Why not go and explore somewhere else for a change?',
+    'I hear there are some pretty nice pubs in Grantchester...',
+    'And there might even be some further out than that...',
+    'Hey, I can see my house from up here!',
+    'Anyway, I hope you\'ve found a new pub or two you like...',
+    'Or at least some you definitely won\'t be going back to...',
+    'Looking at you, <insert soulless Greene King here>',
+    'Either way, what a time you\'ve had...',
+    'I\'m almost sad this is all over...',
+    'But I\'m sure you\'ll find a new challenge!',
+    'Hang on, my favourite bit\'s nearly coming up...',
+    'You\'re gonna love it, I promise...',
+    'Wait for it...',
+    'Oops, not quite yet...',
+    'Are you ready?',
+    'Okay, here we go!!!',
+    '🎷🐬 DoO dOo DoO dOo DoOoO dOo 🎷🐬',
+]
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
 const API_URL = import.meta.env.VITE_API_URL;
@@ -177,6 +203,47 @@ export default function Map() {
         } else if (nearestPub) {
             setMessage(`Your nearest pub is... The ${nearestPub.name}!`);
             setLoading(false);
+        } else if (creditsMusic) {
+            setMessage(null);
+            setComplete(null);
+            
+            let timeout;
+            for (let i = 0; i < creditsMessages.length; i++) {
+                switch(true) {
+                    case (i === 0):
+                        timeout = 0;
+                        break;
+                    case (i === 3 ):
+                        timeout += 17 * creditsBeatLength;
+                        break;
+                    case (i === 9 ):
+                        timeout += 20 * creditsBeatLength;
+                        break;
+                    case (i === 20 ):
+                        timeout += 8 * creditsBeatLength;
+                        break;
+                    case (i === 21 ):
+                        timeout += 9 * creditsBeatLength;
+                        break;
+                    default:
+                        timeout += 16 * creditsBeatLength;
+                }
+                setTimeout(() => {
+                    setMessage(creditsMessages[i])
+                }, timeout)
+                if (i === creditsMessages.length - 1) {
+                    setTimeout(() => {
+                        setMessage(null);
+                    }, timeout +  (3 * 16  + 15) * creditsBeatLength)
+                    setTimeout(() => {
+                        cancelCredits();
+                        setComplete(null);
+                        setMessage(null);
+                        mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+                (null);
+                    }, timeout +  (7 * 16  + 15) * creditsBeatLength)
+                }
+            }
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`);
         } else if (loading) {
@@ -185,15 +252,17 @@ export default function Map() {
             setMessage(null);
         }
 
-        const messageTimeout = setTimeout(() => {
-            setMessage(null);
-            setComplete(null);
-        }, 5000);
-    
-        return () => {
-            clearTimeout(messageTimeout);   
-        };    
-    }, [randomPub, nearestPub, complete, loading]);
+        if (!creditsMusic) {
+            const messageTimeout = setTimeout(() => {
+                setMessage(null);
+                setComplete(null);
+            }, 5000);    
+            return () => {
+                clearTimeout(messageTimeout);   
+            };    
+        }
+        
+    }, [randomPub, nearestPub, complete, loading, creditsMusic]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement('div');
@@ -282,13 +351,24 @@ export default function Map() {
             mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
         });
         enableInteractions();  
+        var id = window.setTimeout(function() {}, 0);
+        while (id--) {
+            window.clearTimeout(id);
+        }
+        setMessage(null);
+        setComplete(null);
+        setRandomPub(null);
+        setNearestPub(null);
       } 
       
     const handleRandomPubClick = () => {
         if (creditsMusic) {
             cancelCredits();
         } 
-        setNearestPub(null)
+        setNearestPub(null);
+        setComplete(null);
+        setRandomPub(null);
+        setMessage(null);
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             
