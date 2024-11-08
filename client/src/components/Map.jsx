@@ -228,6 +228,7 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
+        cancelCredits();
         const localVisitedPubs = JSON.parse(localStorage.getItem('visited_pub_ids'));
         const method = localVisitedPubs.includes(pubId) ? 'remove' : 'add';
         let newVisitedPubs
@@ -245,6 +246,9 @@ export default function Map() {
     };
 
     const handleResetViewClick = () => {
+        if (creditsMusic) {
+            cancelCredits();
+        } 
         playSound('zoom_out.mp3');
         setComplete(null);
         setRandomPub(null);
@@ -252,23 +256,60 @@ export default function Map() {
         setMessage(null);
         mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
     };
+    function disableInteractions() {
+        mapRef.current.scrollZoom.disable();
+        mapRef.current.touchZoomRotate.disable();
+        mapRef.current.dragPan.disable();
+        mapRef.current.boxZoom.disable();
+        mapRef.current.keyboard.disable();
+        mapRef.current.doubleClickZoom.disable();
+      }
+      
+      function enableInteractions() {
+        mapRef.current.scrollZoom.enable();
+        mapRef.current.touchZoomRotate.enable();
+        mapRef.current.dragPan.enable();
+        mapRef.current.boxZoom.enable();
+        mapRef.current.keyboard.enable();
+        mapRef.current.doubleClickZoom.enable();
+      }
 
+      function cancelCredits() {
+        const credits = document.getElementById('credits');
+        credits.pause();
+        setCreditsMusic(false);
+        requestAnimationFrame(() => {
+            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+        });
+        enableInteractions();  
+      } 
+      
     const handleRandomPubClick = () => {
+        if (creditsMusic) {
+            cancelCredits();
+        } 
         setNearestPub(null)
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+            
             const credits = document.getElementById('credits');
             const audio = document.getElementById('music');
+            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds, {duration: 500});
 
             if (creditsMusic) {
-                credits.pause();
+                cancelCredits();
             } else {
                 audio.pause();
                 setMusic(false);
+                credits.load();
                 credits.play();
+                setCreditsMusic(true);
+                disableInteractions();
+                setTimeout(() => {
+                    mapRef.current.flyTo({center: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoom: 0, duration: 352000});
+                }, 500);
             }
-            setCreditsMusic(!creditsMusic);
-            mapRef.current.flyTo({center: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoom: 1, duration: 352000})
+
 
         } else {
             const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
@@ -304,6 +345,9 @@ export default function Map() {
     }
     
     const handleNearestPubClick = () => {
+        if (creditsMusic) {
+            cancelCredits();
+        } 
         setComplete(null);
         setRandomPub(null);
         setLoading(true);
@@ -328,6 +372,9 @@ export default function Map() {
     };
 
     const handleMusicClick = () => {
+        if (creditsMusic) {
+            cancelCredits();
+        } 
         const audio = document.getElementById('music');
         const credits = document.getElementById('credits');
         if (music) {
@@ -347,6 +394,9 @@ export default function Map() {
 
 
     const handleInfoClick = () => {
+        if (creditsMusic) {
+            cancelCredits();
+        } 
         alert('Welcome, traveller!\n\n'
             + '🍻 Click a pub to mark it as visited\n'
             + '🎲 Recommends a random unvisited pub\n'
@@ -360,7 +410,7 @@ export default function Map() {
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <Button label="🏠" handleClickAction={handleResetViewClick} />
                 <Button label={music ? "🔇" : "🎵"} handleClickAction={handleMusicClick} />
-                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? (creditsMusic ? "🔇" : "🐬") : "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
+                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? (creditsMusic ? "🛑" : "🐬") : "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
                 <Button label="📍" handleClickAction={handleNearestPubClick} style="brown" />
             </div>
             
