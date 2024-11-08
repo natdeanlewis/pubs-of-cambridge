@@ -159,6 +159,7 @@ export default function Map() {
 
     useEffect(() => {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
+            playSound('fanfare.mp3');
             playSound('applause.mp3');
         }
     }, [visitedPubs]);
