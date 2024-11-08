@@ -17,7 +17,6 @@ const INITIAL_MAP_SETTINGS = {
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
 const API_URL = import.meta.env.VITE_API_URL;
-const USER_ID = '67269c96e45eaf3016550af0';
 let firstTime = true;
 
 export default function Map() {
@@ -47,13 +46,13 @@ export default function Map() {
     };
 
     const fetchVisitedPubs = async () => {
-        const response = await fetch(`${API_URL}/users/${USER_ID}`);
-        if (!response.ok) {
-            console.error(`An error occurred: ${response.statusText}`);
-            return;
+        let localVisitedPubs = JSON.parse(localStorage.getItem('visited_pub_ids'));
+        if (!localVisitedPubs) {
+            localVisitedPubs = []
+            localStorage.setItem('visited_pub_ids', JSON.stringify(localVisitedPubs));
         }
-        const userData = await response.json();
-        setVisitedPubs(userData.visited_pub_ids);
+        setVisitedPubs(localVisitedPubs);
+        return localVisitedPubs;
     };
 
     const fetchLoadCount = async () => {
@@ -219,34 +218,21 @@ export default function Map() {
         return el;
     };
 
-    const updateVisitedStatus = async (pubId) => {
-        const method = visitedPubs.includes(pubId) ? 'remove' : 'add';
+    const updateVisitedStatus = (pubId) => {
+        const localVisitedPubs = JSON.parse(localStorage.getItem('visited_pub_ids'));
+        const method = localVisitedPubs.includes(pubId) ? 'remove' : 'add';
         let newVisitedPubs
         if (method === 'remove') {
-            newVisitedPubs = visitedPubs.filter(id => id !== pubId);
+            newVisitedPubs = localVisitedPubs.filter(id => id !== pubId);
             playSound('glass_break.mp3')
         } else {
-            newVisitedPubs = [...visitedPubs, pubId];
+            newVisitedPubs = [...localVisitedPubs, pubId];
             playSound('glass_clink.mp3')
         }
+        localStorage.setItem('visited_pub_ids', JSON.stringify(newVisitedPubs));
         setVisitedPubs(newVisitedPubs);
 
         firstTime = false;
-
-        await fetch(`${API_URL}/users/${method}/${USER_ID}`, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ pubId }),
-        });
-
-        const response = await fetch(`${API_URL}/users/${USER_ID}`);
-        const userData = await response.json();
-
-        if (!userData.visited_pub_ids.sort().every((element, index) => element === newVisitedPubs.sort()[index])) {
-            setVisitedPubs(userData.visited_pub_ids);
-        }
     };
 
     const handleResetViewClick = () => {
