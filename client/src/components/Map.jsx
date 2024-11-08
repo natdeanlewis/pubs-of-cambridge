@@ -183,7 +183,7 @@ export default function Map() {
                 mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
             });
         }
-    }, [pubs, visitedPubs]);
+    }, [pubs, visitedPubs, creditsMusic]);
 
     useEffect(() => {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
@@ -297,7 +297,9 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
-        cancelCredits();
+        if(creditsMusic) {
+            cancelCredits();
+        }    
         const localVisitedPubs = JSON.parse(localStorage.getItem('visited_pub_ids'));
         const method = localVisitedPubs.includes(pubId) ? 'remove' : 'add';
         let newVisitedPubs
