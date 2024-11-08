@@ -161,10 +161,8 @@ export default function Map() {
         if (!firstTime && pubs.length > 0 && pubs.length === visitedPubs.length) {
             const audio = document.getElementById('music');
             if (music) {
-                audio.muted = true;   
-                setTimeout(() => {
-                    audio.muted = false;
-                }, 3000) 
+                audio.pause();
+                setMusic(!music)
             }
             playSound('fanfare.mp3');
             playSound('applause.mp3');
@@ -256,17 +254,22 @@ export default function Map() {
     const handleRandomPubClick = () => {
         setNearestPub(null)
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
-        const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
-        playSound('die_roll.mp3');
-        if (unvisitedPubs.length === 0) {
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+        if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+            const audio = document.getElementById('credits');
+            audio.play()
         } else {
-            const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
-            setRandomPub(randomPub);
-            mapRef.current.flyTo({
-                center: [randomPub.longitude, randomPub.latitude],
-                zoom: 16,
-            });
+            const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
+            playSound('die_roll.mp3');
+            if (unvisitedPubs.length === 0) {
+                mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+            } else {
+                const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
+                setRandomPub(randomPub);
+                mapRef.current.flyTo({
+                    center: [randomPub.longitude, randomPub.latitude],
+                    zoom: 16,
+                });
+            }
         }
     };
 
@@ -341,12 +344,16 @@ export default function Map() {
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <Button label="🏠" handleClickAction={handleResetViewClick} />
                 <Button label={music ? "🔇" : "🎵"} handleClickAction={handleMusicClick} />
-                <Button label="🎲" handleClickAction={handleRandomPubClick} style="brown" />
+                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? "🐬": "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
                 <Button label="📍" handleClickAction={handleNearestPubClick} style="brown" />
             </div>
             
             <audio id='music' loop>
                 <source src='lute.mp3' />
+            </audio>
+
+            <audio id='credits' loop>
+                <source src='dolphin.mp3' />
             </audio>
 
             {message && (
