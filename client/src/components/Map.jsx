@@ -12,7 +12,6 @@ const INITIAL_MAP_SETTINGS = {
     maxZoom: 20,
     maxPitch: 0,
     bearingSnap: 180,
-    maxBounds: [[INITIAL_LONGITUDE - 0.3, INITIAL_LATITUDE - 0.1], [INITIAL_LONGITUDE + 0.3, INITIAL_LATITUDE + 0.1]]
 };
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
