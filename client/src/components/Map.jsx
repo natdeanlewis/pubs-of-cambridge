@@ -3,16 +3,16 @@ import mapboxgl from 'mapbox-gl';
 import Button from './Button';
 
 const MAPBOX_USAGE_LIMIT = 50000
-const INITIAL_LATIUDE = 52.2027
+const INITIAL_LATITUDE = 52.207
 const INITIAL_LONGITUDE = 0.137
 const INITIAL_MAP_SETTINGS = {
-    bounds: [[INITIAL_LONGITUDE - 0.045, INITIAL_LATIUDE - 0.045], [INITIAL_LONGITUDE + 0.045, INITIAL_LATIUDE + 0.045]],
+    bounds: [[INITIAL_LONGITUDE - 0.045, INITIAL_LATITUDE - 0.045], [INITIAL_LONGITUDE + 0.045, INITIAL_LATITUDE + 0.045]],
     pitch: 0,
     bearing: 0,
     maxZoom: 20,
     maxPitch: 0,
     bearingSnap: 180,
-    maxBounds: [[INITIAL_LONGITUDE - 0.3, INITIAL_LATIUDE - 0.1], [INITIAL_LONGITUDE + 0.3, INITIAL_LATIUDE + 0.1]]
+    maxBounds: [[INITIAL_LONGITUDE - 0.3, INITIAL_LATITUDE - 0.1], [INITIAL_LONGITUDE + 0.3, INITIAL_LATITUDE + 0.1]]
 };
 
 const MAP_STYLE = 'mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft';
