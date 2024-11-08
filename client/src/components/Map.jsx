@@ -151,7 +151,9 @@ export default function Map() {
         setNearestPub(null);
         setRandomPub(null);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+            requestAnimationFrame(() => {
+                mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+            });
         }
     }, [pubs, visitedPubs]);
 
@@ -230,7 +232,7 @@ export default function Map() {
         }
         localStorage.setItem('visited_pub_ids', JSON.stringify(newVisitedPubs));
         setVisitedPubs(newVisitedPubs);
-
+        
         firstTime = false;
     };
 
@@ -240,7 +242,7 @@ export default function Map() {
         setRandomPub(null);
         setNearestPub(null);
         setMessage(null);
-        mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+        // mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
     };
 
     const handleRandomPubClick = () => {
@@ -249,7 +251,7 @@ export default function Map() {
         const unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
         playSound('die_roll.mp3');
         if (unvisitedPubs.length === 0) {
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+            // mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
         } else {
             const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
             setRandomPub(randomPub);
