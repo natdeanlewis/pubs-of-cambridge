@@ -352,7 +352,7 @@ export default function Map() {
                 <source src='lute.mp3' />
             </audio>
 
-            <audio id='credits' loop>
+            <audio id='credits'>
                 <source src='dolphin.mp3' />
             </audio>
 
