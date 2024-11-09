@@ -7,6 +7,7 @@ export default function Header({
     visitedPubs,
     music,
     creditsMusic,
+    cancelCredits,
     randomPub,
     setComplete,
     setRandomPub,
@@ -168,33 +169,6 @@ export default function Header({
         map.boxZoom.disable();
         map.keyboard.disable();
         map.doubleClickZoom.disable();
-    }
-
-    function enableInteractions() {
-        map.scrollZoom.enable();
-        map.touchZoomRotate.enable();
-        map.dragPan.enable();
-        map.boxZoom.enable();
-        map.keyboard.enable();
-        map.doubleClickZoom.enable();
-    }
-
-    function cancelCredits() {
-        const credits = document.getElementById("credits");
-        credits.pause();
-        setCreditsMusic(false);
-        requestAnimationFrame(() => {
-            map.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-        });
-        enableInteractions();
-        var id = window.setTimeout(function () {}, 0);
-        while (id--) {
-            window.clearTimeout(id);
-        }
-        setMessage(null);
-        setComplete(null);
-        setRandomPub(null);
-        setNearestPub(null);
     }
 
     const handleMusicClick = () => {

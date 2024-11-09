@@ -33,7 +33,6 @@ export default function Markers({
                 updateVisitedStatus(pub._id)
             );
         });
-        console.log(firstTime);
         setComplete(
             !firstTime && pubs.length > 0 && pubs.length === visitedPubs.length
         );
@@ -99,6 +98,5 @@ export default function Markers({
         setVisitedPubs(newVisitedPubs);
 
         setFirstTime(false);
-        console.log(1);
     };
 }

@@ -151,6 +151,33 @@ export default function Map() {
         audio.play();
     };
 
+    function enableInteractions() {
+        mapRef.current.scrollZoom.enable();
+        mapRef.current.touchZoomRotate.enable();
+        mapRef.current.dragPan.enable();
+        mapRef.current.boxZoom.enable();
+        mapRef.current.keyboard.enable();
+        mapRef.current.doubleClickZoom.enable();
+    }
+
+    function cancelCredits() {
+        const credits = document.getElementById("credits");
+        credits.pause();
+        setCreditsMusic(false);
+        requestAnimationFrame(() => {
+            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
+        });
+        enableInteractions();
+        var id = window.setTimeout(function () {}, 0);
+        while (id--) {
+            window.clearTimeout(id);
+        }
+        setMessage(null);
+        setComplete(null);
+        setRandomPub(null);
+        setNearestPub(null);
+    }
+
     return (
         <div className="relative h-dvh">
             <Header
@@ -158,6 +185,7 @@ export default function Map() {
                 visitedPubs={visitedPubs}
                 music={music}
                 creditsMusic={creditsMusic}
+                cancelCredits={cancelCredits}
                 randomPub={randomPub}
                 setComplete={setComplete}
                 setRandomPub={setRandomPub}
