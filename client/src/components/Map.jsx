@@ -117,7 +117,7 @@ export default function Map() {
                 navigator.geolocation.getCurrentPosition((position) => {
                     setUserPosition({
                         latitude: position.coords.latitude,
-                        longitude: position.coords.longitude
+                        longitude: position.coords.longitude,
                     });
                 });
             }

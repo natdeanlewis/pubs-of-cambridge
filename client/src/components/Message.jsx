@@ -106,14 +106,14 @@ export default function Message({
     }, [randomPub, nearestPub, complete, loading, creditsMusic]);
 
     return (
-        <div>
-            {message && (
-                <div className="absolute w-full flex justify-center text-center bottom-12 sm:top-12 sm:bottom-auto">
-                    <div className="bg-amber-100 shadow m-8 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic text-balance">
-                        {message}
-                    </div>
-                </div>
-            )}
+<div>
+    {message && (
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center bottom-12 sm:top-12 sm:bottom-auto w-full sm:w-auto max-w-[75%]">
+            <div className="bg-amber-100 shadow my-8 py-2 px-4 z-30 rounded text-neutral-800 font-bold font-serif italic text-balance">
+                {message}
+            </div>
         </div>
+    )}
+</div>
     );
 }
