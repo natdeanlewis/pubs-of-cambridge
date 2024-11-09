@@ -1,34 +1,45 @@
 import { useEffect } from "react";
 
-export default function Message({ message, randomPub, nearestPub, complete, loading, creditsMusic, setMessage, setLoading, setComplete, INITIAL_MAP_SETTINGS}) {
-    const creditsBeatLength = 60000/122.36
-    const creditsMessages =[
-        '(Sound on!) Well, here we are at last...',
-        'Just look at all those pubs...',
-        'More to the point, think of all those drinks!',
-        'It\'s been a long journey...',
-        'But there\'s a whole world out there...',
-        'What on earth have you been doing?!',
-        'Why not go and explore somewhere else for a change?',
-        'I hear there are some pretty nice pubs in Grantchester...',
-        'And there might even be some further out than that...',
-        'Hey, I can see my house from up here!',
-        'Anyway, I hope you\'ve found a new pub or two you like...',
-        'Or at least some you definitely won\'t be going back to...',
-        'Looking at you, <insert soulless Greene King here>',
-        'Either way, what a time you\'ve had...',
-        'I\'m almost sad this is all over...',
-        'But I\'m sure you\'ll find a new challenge!',
-        'Hang on, my favourite bit\'s nearly coming up...',
-        'You\'re gonna love it, I promise...',
-        'Wait for it...',
-        'Oops, not quite yet...',
-        'Are you ready?',
-        'Okay, here we go!!!',
-        '🎷🐬 DoO dOo DoO dOo DoOoO dOo 🎷🐬',
-    ]
+export default function Message({
+    message,
+    randomPub,
+    nearestPub,
+    complete,
+    loading,
+    creditsMusic,
+    setMessage,
+    setLoading,
+    setComplete,
+    INITIAL_MAP_SETTINGS,
+}) {
+    const creditsBeatLength = 60000 / 122.36;
+    const creditsMessages = [
+        "(Sound on!) Well, here we are at last...",
+        "Just look at all those pubs...",
+        "More to the point, think of all those drinks!",
+        "It's been a long journey...",
+        "But there's a whole world out there...",
+        "What on earth have you been doing?!",
+        "Why not go and explore somewhere else for a change?",
+        "I hear there are some pretty nice pubs in Grantchester...",
+        "And there might even be some further out than that...",
+        "Hey, I can see my house from up here!",
+        "Anyway, I hope you've found a new pub or two you like...",
+        "Or at least some you definitely won't be going back to...",
+        "Looking at you, <insert soulless Greene King here>",
+        "Either way, what a time you've had...",
+        "I'm almost sad this is all over...",
+        "But I'm sure you'll find a new challenge!",
+        "Hang on, my favourite bit's nearly coming up...",
+        "You're gonna love it, I promise...",
+        "Wait for it...",
+        "Oops, not quite yet...",
+        "Are you ready?",
+        "Okay, here we go!!!",
+        "🎷🐬 DoO dOo DoO dOo DoOoO dOo 🎷🐬",
+    ];
 
-    useEffect(() => {    
+    useEffect(() => {
         if (randomPub) {
             setMessage(`How about... The ${randomPub.name}?`);
         } else if (nearestPub) {
@@ -37,42 +48,42 @@ export default function Message({ message, randomPub, nearestPub, complete, load
         } else if (creditsMusic) {
             setMessage(null);
             setComplete(null);
-            
+
             let timeout;
             for (let i = 0; i < creditsMessages.length; i++) {
-                switch(true) {
-                    case (i === 0):
+                switch (true) {
+                    case i === 0:
                         timeout = 0;
                         break;
-                    case (i === 3 ):
+                    case i === 3:
                         timeout += 17 * creditsBeatLength;
                         break;
-                    case (i === 10 ):
+                    case i === 10:
                         timeout += 20 * creditsBeatLength;
                         break;
-                    case (i === 21 ):
+                    case i === 21:
                         timeout += 8 * creditsBeatLength;
                         break;
-                    case (i === 22 ):
+                    case i === 22:
                         timeout += 9 * creditsBeatLength;
                         break;
                     default:
                         timeout += 16 * creditsBeatLength;
                 }
                 setTimeout(() => {
-                    setMessage(creditsMessages[i])
-                }, timeout)
+                    setMessage(creditsMessages[i]);
+                }, timeout);
                 if (i === creditsMessages.length - 1) {
                     setTimeout(() => {
                         setMessage(null);
-                    }, timeout +  (3 * 16  + 15) * creditsBeatLength)
+                    }, timeout + (3 * 16 + 15) * creditsBeatLength);
                     setTimeout(() => {
                         cancelCredits();
                         setComplete(null);
                         setMessage(null);
                         map.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-                (null);
-                    }, timeout +  (7 * 16  + 15) * creditsBeatLength)
+                        null;
+                    }, timeout + (7 * 16 + 15) * creditsBeatLength);
                 }
             }
         } else if (complete) {
@@ -87,12 +98,11 @@ export default function Message({ message, randomPub, nearestPub, complete, load
             const messageTimeout = setTimeout(() => {
                 setMessage(null);
                 setComplete(null);
-            }, 5000);    
+            }, 5000);
             return () => {
-                clearTimeout(messageTimeout);   
-            };    
+                clearTimeout(messageTimeout);
+            };
         }
-        
     }, [randomPub, nearestPub, complete, loading, creditsMusic]);
 
     return (

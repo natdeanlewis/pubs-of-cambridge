@@ -7,36 +7,35 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 router.get("/pubs", async (req, res) => {
-  let collection = await db.collection("pubs");
-  let results = await collection.find({}).toArray();
-  res.send(results).status(200);
+    let collection = await db.collection("pubs");
+    let results = await collection.find({}).toArray();
+    res.send(results).status(200);
 });
 
-
 router.get("/load_count", async (req, res) => {
-  let collection = await db.collection("map_loads");
-  let query = { _id: new ObjectId(process.env.LOAD_COUNT_ID) };
-  let result = await collection.findOne(query);
+    let collection = await db.collection("map_loads");
+    let query = { _id: new ObjectId(process.env.LOAD_COUNT_ID) };
+    let result = await collection.findOne(query);
 
-  if (!result) res.send("Not found").status(404);
-  else res.send(result).status(200);
+    if (!result) res.send("Not found").status(404);
+    else res.send(result).status(200);
 });
 
 router.patch("/load_count", async (req, res) => {
-  try {
-    const query = { _id: new ObjectId(process.env.LOAD_COUNT_ID) };
-    const updates = {
-      $inc: {
-        load_count: 1,
-      },
-    };
-    let collection = await db.collection("map_loads");
-    let result = await collection.updateOne(query, updates);
-    res.send(result).status(200);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error updating record");
-  }
+    try {
+        const query = { _id: new ObjectId(process.env.LOAD_COUNT_ID) };
+        const updates = {
+            $inc: {
+                load_count: 1,
+            },
+        };
+        let collection = await db.collection("map_loads");
+        let result = await collection.updateOne(query, updates);
+        res.send(result).status(200);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error updating record");
+    }
 });
 
 export default router;

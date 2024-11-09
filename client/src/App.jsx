@@ -1,10 +1,8 @@
 import { Outlet } from "react-router-dom";
 
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const App = () => {
-  return (
-    <Outlet />
-  );
+    return <Outlet />;
 };
-export default App
+export default App;
