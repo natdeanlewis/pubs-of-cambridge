@@ -78,7 +78,6 @@ export default function Header({
                 map.fitBounds(INITIAL_MAP_SETTINGS.bounds);
             } else {
                 if (unvisitedPubs.length === 0) {
-                    console.log(randomPub);
                     map.flyTo({
                         center: [randomPub.longitude, randomPub.latitude],
                         zoom: 16,

@@ -3,6 +3,7 @@ import mapboxgl from "mapbox-gl";
 import Markers from "./Markers";
 import Message from "./Message";
 import Header from "./Header";
+import UserMarker from "./UserMarker";
 
 const MAPBOX_USAGE_LIMIT = 50000;
 const INITIAL_LATITUDE = 52.207;
@@ -39,6 +40,7 @@ export default function Map() {
     const [creditsMusic, setCreditsMusic] = useState(null);
     const [message, setMessage] = useState(null);
     const [loadCount, setLoadCount] = useState(null);
+    const [userPosition, setUserPosition] = useState(null);
 
     const fetchPubs = async () => {
         const response = await fetch(`${API_URL}/pubs`);
@@ -113,29 +115,10 @@ export default function Map() {
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    const userMarker = document.createElement("div");
-                    userMarker.className = "group hover:z-20";
-                    userMarker.style.zIndex = "10";
-
-                    userMarker.innerHTML = `
-                        <span class="relative flex items-center justify-center text-2xl">
-                             <span class="animate-ping absolute inline-flex rounded-full">👑</span>
-                            <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
-                        </span>
-                    `;
-                    const label = document.createElement("div");
-                    label.className =
-                        "absolute bottom-[-32px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic";
-                    label.textContent = `You!`;
-
-                    userMarker.appendChild(label);
-
-                    new mapboxgl.Marker(userMarker)
-                        .setLngLat([
-                            position.coords.longitude,
-                            position.coords.latitude,
-                        ])
-                        .addTo(mapRef.current);
+                    setUserPosition({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude
+                    });
                 });
             }
 
@@ -219,6 +202,14 @@ export default function Map() {
                 INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS}
                 map={mapRef.current}
             />
+
+            {userPosition && (
+                <UserMarker
+                    longitude={userPosition.longitude}
+                    latitude={userPosition.latitude}
+                    map={mapRef.current}
+                />
+            )}
         </div>
     );
 }
