@@ -23,7 +23,6 @@ const INITIAL_MAP_SETTINGS = {
 const MAP_STYLE =
     "mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft";
 const API_URL = import.meta.env.VITE_API_URL;
-let firstTime = true;
 
 export default function Map() {
     const mapRef = useRef();
@@ -41,6 +40,7 @@ export default function Map() {
     const [message, setMessage] = useState(null);
     const [loadCount, setLoadCount] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
+    const [firstTime, setFirstTime] = useState(true);
 
     const fetchPubs = async () => {
         const response = await fetch(`${API_URL}/pubs`);
@@ -185,6 +185,7 @@ export default function Map() {
                 setRandomPub={setRandomPub}
                 setVisitedPubs={setVisitedPubs}
                 firstTime={firstTime}
+                setFirstTime={setFirstTime}
                 playSound={playSound}
                 INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS}
             />

@@ -12,6 +12,7 @@ export default function Markers({
     setRandomPub,
     setVisitedPubs,
     firstTime,
+    setFirstTime,
     playSound,
     INITIAL_MAP_SETTINGS,
 }) {
@@ -32,7 +33,7 @@ export default function Markers({
                 updateVisitedStatus(pub._id)
             );
         });
-
+        console.log(firstTime);
         setComplete(
             !firstTime && pubs.length > 0 && pubs.length === visitedPubs.length
         );
@@ -97,6 +98,7 @@ export default function Markers({
         localStorage.setItem("visited_pub_ids", JSON.stringify(newVisitedPubs));
         setVisitedPubs(newVisitedPubs);
 
-        firstTime = false;
+        setFirstTime(false);
+        console.log(1);
     };
 }
