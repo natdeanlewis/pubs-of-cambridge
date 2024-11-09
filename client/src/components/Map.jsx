@@ -1,9 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import Button from './Button';
 import Markers from './Markers';
-import Music from './Music';
 import Message from './Message';
+import Header from './Header';
 
 const MAPBOX_USAGE_LIMIT = 50000
 const INITIAL_LATITUDE = 52.207
@@ -147,181 +146,6 @@ export default function Map() {
         }
     }, [visitedPubs]);
 
-    const handleResetViewClick = () => {
-        if (creditsMusic) {
-            cancelCredits();
-        } 
-        playSound('zoom_out.mp3');
-        setComplete(null);
-        setRandomPub(null);
-        setNearestPub(null);
-        setMessage(null);
-        mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-    };
-
-    const handleRandomPubClick = () => {
-        if (creditsMusic) {
-            cancelCredits();
-        } 
-        setNearestPub(null);
-        setComplete(null);
-        setRandomPub(null);
-        setMessage(null);
-        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
-        if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            
-            const credits = document.getElementById('credits');
-            const audio = document.getElementById('music');
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds, {duration: 500});
-
-            if (creditsMusic) {
-                cancelCredits();
-            } else {
-                audio.pause();
-                setMusic(false);
-                credits.load();
-                credits.play();
-                setCreditsMusic(true);
-                disableInteractions();
-                setTimeout(() => {
-                    mapRef.current.flyTo({center: [INITIAL_LONGITUDE, INITIAL_LATITUDE], zoom: 0, duration: 352000});
-                }, 500);
-            }
-        } else {
-            playSound('die_roll.mp3');
-            let unvisitedPubs = pubs.filter(pub => !visitedPubs.includes(pub._id));
-            if (randomPub) {
-                unvisitedPubs = unvisitedPubs.filter(pub => pub._id != randomPub._id)
-            }
-            if (!randomPub && unvisitedPubs.length === 0) {
-                mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-            } else {
-                if (unvisitedPubs.length === 0) {
-                    console.log(randomPub)
-                    mapRef.current.flyTo({
-                        center: [randomPub.longitude, randomPub.latitude],
-                        zoom: 16,
-                    });    
-                } else {
-                    const randomPub = unvisitedPubs[Math.floor(Math.random() * unvisitedPubs.length)];
-                    setRandomPub(randomPub);
-                    mapRef.current.flyTo({
-                        center: [randomPub.longitude, randomPub.latitude],
-                        zoom: 16,
-                    });
-                }
-            }
-        }
-    };
-
-    function calculateNearestPub(position) {
-        let minDistance = Infinity;
-        let nearestPub = null;
-    
-        pubs.forEach(pub => {
-            const distance = Math.pow(pub.latitude - position.coords.latitude, 2) + Math.pow(pub.longitude - position.coords.longitude, 2);
-        
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestPub = pub;
-            }
-        });
-    
-        setNearestPub(nearestPub);
-        return nearestPub;
-    }
-    
-    const handleNearestPubClick = () => {
-        if (creditsMusic) {
-            cancelCredits();
-        } 
-        setComplete(null);
-        setRandomPub(null);
-        setLoading(true);
-        if (pubs.length === 0) return;
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                
-                const nearestPub = calculateNearestPub(position);
-                playSound('door.mp3');
-    
-                if (nearestPub) {
-                    mapRef.current.flyTo({
-                        center: [nearestPub.longitude, nearestPub.latitude],
-                        zoom: 16,
-                    });
-                }
-            }, (error) => {
-                console.error('Error getting location:', error);
-                alert('Share your location to enable finding your nearest pub');
-            });
-        }
-    };
-
-    const handleInfoClick = () => {
-        if (creditsMusic) {
-            cancelCredits();
-        } 
-        alert('Welcome, traveller!\n\n'
-            + '🍻 Click a pub to mark it as visited\n'
-            + '🎲 Recommends a random unvisited pub\n'
-            + '📍 Finds your nearest pub\n'
-            + '🏠 Resets the view\n'
-            + '🎵 Toggles the music')
-    };
-
-    function disableInteractions() {
-        mapRef.current.scrollZoom.disable();
-        mapRef.current.touchZoomRotate.disable();
-        mapRef.current.dragPan.disable();
-        mapRef.current.boxZoom.disable();
-        mapRef.current.keyboard.disable();
-        mapRef.current.doubleClickZoom.disable();
-    }
-      
-    function enableInteractions() {
-        mapRef.current.scrollZoom.enable();
-        mapRef.current.touchZoomRotate.enable();
-        mapRef.current.dragPan.enable();
-        mapRef.current.boxZoom.enable();
-        mapRef.current.keyboard.enable();
-        mapRef.current.doubleClickZoom.enable();
-    }
-
-    function cancelCredits() {
-        const credits = document.getElementById('credits');
-        credits.pause();
-        setCreditsMusic(false);
-        requestAnimationFrame(() => {
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-        });
-        enableInteractions();  
-        var id = window.setTimeout(function() {}, 0);
-        while (id--) {
-            window.clearTimeout(id);
-        }
-        setMessage(null);
-        setComplete(null);
-        setRandomPub(null);
-        setNearestPub(null);
-    }
-
-    const handleMusicClick = () => {
-        if (creditsMusic) {
-            cancelCredits();
-        } 
-        const audio = document.getElementById('music');
-        const credits = document.getElementById('credits');
-        if (music) {
-            audio.pause();
-        } else {
-            credits.pause();
-            setCreditsMusic(false);
-            audio.play();
-        }
-        setMusic(!music);
-    };
-
     const playSound = (file) => {
         const audio = new Audio(file);
         audio.play();
@@ -329,29 +153,12 @@ export default function Map() {
 
     return (
         <div className="relative h-dvh">
-            <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
-                <Button label="🏠" handleClickAction={handleResetViewClick} />
-                <Button label={music ? "🔇" : "🎵"} handleClickAction={handleMusicClick} />
-                <Button label={pubs.length > 0 && visitedPubs.length === pubs.length ? (creditsMusic ? "🛑" : "🐬") : "🎲"} handleClickAction={handleRandomPubClick} style="brown" />
-                <Button label="📍" handleClickAction={handleNearestPubClick} style="brown" />
-            </div>
-
-            <Message message={message} randomPub={randomPub} nearestPub={nearestPub} complete={complete} loading={loading} creditsMusic={creditsMusic} setMessage={setMessage} setLoading={setLoading} setComplete={setComplete} INITIAL_MAP_SETTINGS />
-
-            <div className="absolute inline-flex top-4 right-4 z-30">
-                {pubs.length > 0 && (
-                    <p className='m-2 text-white font-bold bg-yellow-700 py-2 px-4 rounded font-serif'>
-                        <span className='italic'>{visitedPubs.length}/{pubs.length}</span>
-                        {visitedPubs.length === pubs.length ? ' 🥳' : ' 🍻'}
-                    </p>
-                )}
-                <Button label="ℹ️" handleClickAction={handleInfoClick} />
-            </div>
+            <Header pubs={pubs} visitedPubs={visitedPubs} music={music} creditsMusic={creditsMusic} setComplete={setComplete} setRandomPub={setRandomPub} setNearestPub={setNearestPub} setMessage={setMessage} setMusic={setMusic} setCreditsMusic={setCreditsMusic} playSound={playSound} map={mapRef.current} INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS} INITIAL_LATITUDE={INITIAL_LATITUDE} INITIAL_LONGITUDE={INITIAL_LONGITUDE} />
 
             <div id='map-container' className="h-dvh" ref={mapContainerRef} />
             <Markers map={mapRef.current} markers={markers} pubs={pubs} visitedPubs={visitedPubs} creditsMsuic={creditsMusic} setComplete={setComplete} setNearestPub={setNearestPub} setRandomPub={setRandomPub} setVisitedPubs={setVisitedPubs} firstTime={firstTime} playSound={playSound} INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS} />
-            <Music id='music' loop={true} src='lute.mp3'/>
-            <Music id='credits' src='dolphin.mp3'/>
+
+            <Message message={message} randomPub={randomPub} nearestPub={nearestPub} complete={complete} loading={loading} creditsMusic={creditsMusic} setMessage={setMessage} setLoading={setLoading} setComplete={setComplete} INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS} map={mapRef.current} />
         </div>
     );
 }
