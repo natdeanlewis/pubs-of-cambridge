@@ -175,10 +175,12 @@ export default function Map() {
                 visitedPubs={visitedPubs}
                 music={music}
                 creditsMusic={creditsMusic}
+                randomPub={randomPub}
                 setComplete={setComplete}
                 setRandomPub={setRandomPub}
                 setNearestPub={setNearestPub}
                 setMessage={setMessage}
+                setLoading={setLoading}
                 setMusic={setMusic}
                 setCreditsMusic={setCreditsMusic}
                 playSound={playSound}
