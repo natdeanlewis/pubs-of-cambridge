@@ -197,6 +197,7 @@ export default function Map() {
                 complete={complete}
                 loading={loading}
                 creditsMusic={creditsMusic}
+                cancelCredits={cancelCredits}
                 setMessage={setMessage}
                 setLoading={setLoading}
                 setComplete={setComplete}

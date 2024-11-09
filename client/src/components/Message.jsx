@@ -7,10 +7,12 @@ export default function Message({
     complete,
     loading,
     creditsMusic,
+    cancelCredits,
     setMessage,
     setLoading,
     setComplete,
     INITIAL_MAP_SETTINGS,
+    map,
 }) {
     const creditsBeatLength = 60000 / 122.36;
     const creditsMessages = [
