@@ -27,7 +27,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 export default function Map() {
     const mapRef = useRef();
     const mapContainerRef = useRef();
-    const markers = useRef([]);
 
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
@@ -38,7 +37,7 @@ export default function Map() {
     const [music, setMusic] = useState(null);
     const [creditsMusic, setCreditsMusic] = useState(null);
     const [message, setMessage] = useState(null);
-    const [loadCount, setLoadCount] = useState(null);
+    const [loadCountRecord, setLoadCountRecord] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
 
@@ -68,17 +67,17 @@ export default function Map() {
         return localVisitedPubs;
     };
 
-    const fetchLoadCount = async () => {
+    const fetchLoadCountRecord = async () => {
         const response = await fetch(`${API_URL}/load_count`);
         if (!response.ok) {
             console.error(`An error occurred: ${response.statusText}`);
             return;
         }
-        const load_count_record = await response.json();
-        setLoadCount(load_count_record.load_count);
+        const loadCountRecord = await response.json();
+        setLoadCountRecord(loadCountRecord);
     };
 
-    const updateLoadCount = async () => {
+    const incrementLoadCountRecord = async () => {
         await fetch(`${API_URL}/load_count`, {
             method: "PATCH",
             headers: {
@@ -87,17 +86,52 @@ export default function Map() {
         });
     };
 
-    useEffect(() => {
-        fetchLoadCount();
-    }, []);
+    const resetLoadCountPeriod = async () => {
+        await fetch(`${API_URL}/load_count/period`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    };
 
     useEffect(() => {
-        if (loadCount === null) {
+        fetchLoadCountRecord();
+    }, []);
+
+    const billingPeriodIsCurrent = () => {
+        const createdAt = new Date(loadCountRecord.created_at);
+        const billing_period_month = createdAt.getMonth();
+        const billing_period_year = createdAt.getFullYear();
+        const now = new Date();
+        const now_month = now.getMonth();
+        const now_year = now.getFullYear();
+
+        return (
+            now_month === billing_period_month &&
+            now_year === billing_period_year
+        );
+    };
+
+    useEffect(() => {
+        if (loadCountRecord === null) {
             return;
-        } else if (loadCount > Math.round(0.9 * MAPBOX_USAGE_LIMIT)) {
+        } else if (
+            (!loadCountRecord.load_count && loadCountRecord.load_count != 0) ||
+            !loadCountRecord.created_at
+        ) {
+            alert("Service Unavailable");
+        } else if (
+            billingPeriodIsCurrent() &&
+            loadCountRecord.load_count > Math.round(0.9 * MAPBOX_USAGE_LIMIT)
+        ) {
             alert("Service Unavailable");
         } else {
-            updateLoadCount();
+            if (!billingPeriodIsCurrent()) {
+                resetLoadCountPeriod();
+            } else {
+                incrementLoadCountRecord();
+            }
             const initMap = async () => {
                 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY;
                 mapRef.current = new mapboxgl.Map({
@@ -128,7 +162,7 @@ export default function Map() {
                 }
             };
         }
-    }, [loadCount]);
+    }, [loadCountRecord]);
 
     useEffect(() => {
         if (
@@ -204,7 +238,6 @@ export default function Map() {
             <div id="map-container" className="h-dvh" ref={mapContainerRef} />
             <Markers
                 map={mapRef.current}
-                markers={markers}
                 pubs={pubs}
                 visitedPubs={visitedPubs}
                 creditsMsuic={creditsMusic}

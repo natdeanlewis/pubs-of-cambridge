@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 
 export default function Markers({
     map,
-    markers,
     pubs,
     visitedPubs,
     creditsMusic,
@@ -16,8 +15,10 @@ export default function Markers({
     playSound,
     INITIAL_MAP_SETTINGS,
 }) {
+    const markers = useRef([]);
+
     useEffect(() => {
-        if (!map) return;
+        if (!map || !pubs) return;
 
         markers.current.forEach((marker) => marker.remove());
         markers.current = [];

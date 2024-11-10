@@ -38,4 +38,24 @@ router.patch("/load_count", async (req, res) => {
     }
 });
 
+router.patch("/load_count/period", async (req, res) => {
+    try {
+        const query = { _id: new ObjectId(process.env.LOAD_COUNT_ID) };
+        const updates = {
+            $set: {
+                load_count: 1,
+                created_at: new Date(),
+            },
+        };
+
+        let collection = await db.collection("map_loads");
+        let result = await collection.updateOne(query, updates);
+
+        res.send(result).status(200);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error updating record");
+    }
+});
+
 export default router;
