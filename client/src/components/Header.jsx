@@ -152,14 +152,18 @@ export default function Header({
         if (creditsMusic) {
             cancelCredits();
         }
-        alert(
+        let alert_string =
             "Welcome, traveller!\n\n" +
-                "🍻 Click a pub to mark it as visited\n" +
-                "🎲 Recommends a random unvisited pub\n" +
-                "📍 Finds your nearest pub\n" +
-                "🏠 Resets the view\n" +
-                "🎶/⏸️ Toggles the music"
-        );
+            "🍻 Click a pub to mark it as visited\n" +
+            "🎲 Recommends a random unvisited pub\n" +
+            "📍 Finds your nearest pub\n" +
+            "🏠 Resets the view\n" +
+            "🎶/⏸️ Toggles the music";
+
+        if (pubs.length > 0 && visitedPubs.length === pubs.length) {
+            alert_string += "\n🐬 ???"
+        }
+        alert(alert_string);
     };
 
     function disableInteractions() {
