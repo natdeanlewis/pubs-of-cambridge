@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.loading-image {
+  opacity: 0;
+  clip-path: inset(100% 0 0 0);
+  animation: reveal 1s ease-out forwards infinite;
+}
+
+@keyframes reveal {
+  0% {
+    opacity: 1;
+    clip-path: inset(100% 0 0 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}

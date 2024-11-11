@@ -43,6 +43,7 @@ export default function Map() {
     const [loadCountRecord, setLoadCountRecord] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
+    const [initializing, setInitializing] = useState(true);
 
     function newEncryptedApiKey() {
         const publicKey = forge.pki.publicKeyFromPem(PUBLIC_KEY);
@@ -270,6 +271,10 @@ export default function Map() {
                 mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
             });
         }
+
+        if (markers.current.length > 0) {
+            setInitializing(false);
+        }
     }, [pubs, visitedPubs, creditsMusic]);
 
     const createMarkerElement = (pub) => {
@@ -329,6 +334,17 @@ export default function Map() {
 
     return (
         <div className="relative h-dvh">
+            {initializing && (
+                <div className="fixed w-full h-full bg-black z-50 flex items-center justify-center">
+                    <div className="absolute w-32 h-32">
+                        <img src="cheers_empty.png" />
+                    </div>
+                    <div className="absolute w-32 h-32">
+                        <img src="cheers_full.png" className="loading-image" />
+                    </div>
+                </div>
+            )}
+
             <Header
                 pubs={pubs}
                 visitedPubs={visitedPubs}
