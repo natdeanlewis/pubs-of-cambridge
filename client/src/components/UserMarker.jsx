@@ -4,7 +4,7 @@ import mapboxgl from "mapbox-gl";
 export default function UserMarker({ longitude, latitude, map }) {
     useEffect(() => {
         if (!map) return;
-        
+
         const userMarker = document.createElement("div");
         userMarker.className = "group hover:z-20";
         userMarker.style.zIndex = "10";
