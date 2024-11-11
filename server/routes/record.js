@@ -7,9 +7,13 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 const apiKeyMiddleware = (req, res, next) => {
+    const origin = req.get("Origin");
     const apiKey = req.get("x-api-key");
-    if (apiKey !== process.env.SERVER_API_KEY) {
-        return res.status(403).json({ error: "Forbidden: Invalid API Key" });
+    if (
+        origin !== process.env.CLIENT_ORIGIN ||
+        apiKey !== process.env.SERVER_API_KEY
+    ) {
+        return res.status(403).json({ message: "Forbidden" });
     }
     next();
 };
