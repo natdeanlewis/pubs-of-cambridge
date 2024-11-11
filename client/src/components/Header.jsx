@@ -158,7 +158,7 @@ export default function Header({
                 "🎲 Recommends a random unvisited pub\n" +
                 "📍 Finds your nearest pub\n" +
                 "🏠 Resets the view\n" +
-                "🎵 Toggles the music"
+                "🎶/⏸️ Toggles the music"
         );
     };
 
@@ -192,14 +192,14 @@ export default function Header({
             <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
                 <Button label="🏠" handleClickAction={handleResetViewClick} />
                 <Button
-                    label={music ? "🔇" : "🎵"}
+                    label={music ? "⏸️" : "🎶"}
                     handleClickAction={handleMusicClick}
                 />
                 <Button
                     label={
                         pubs.length > 0 && visitedPubs.length === pubs.length
                             ? creditsMusic
-                                ? "🛑"
+                                ? "⏹️"
                                 : "🐬"
                             : "🎲"
                     }
