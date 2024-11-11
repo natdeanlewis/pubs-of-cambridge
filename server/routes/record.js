@@ -6,6 +6,16 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
+const apiKeyMiddleware = (req, res, next) => {
+    const apiKey = req.get("x-api-key");
+    if (apiKey !== process.env.SERVER_API_KEY) {
+        return res.status(403).json({ error: "Forbidden: Invalid API Key" });
+    }
+    next();
+};
+
+router.use(apiKeyMiddleware);
+
 router.get("/pubs", async (req, res) => {
     let collection = await db.collection("pubs");
     let results = await collection.find({}).toArray();

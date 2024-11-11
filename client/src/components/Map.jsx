@@ -22,6 +22,7 @@ const INITIAL_MAP_SETTINGS = {
 const MAP_STYLE =
     "mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft";
 const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export default function Map() {
     const mapRef = useRef();
@@ -42,7 +43,13 @@ export default function Map() {
     const [firstTime, setFirstTime] = useState(true);
 
     const fetchPubs = async () => {
-        const response = await fetch(`${API_URL}/pubs`);
+        const response = await fetch(`${API_URL}/pubs`, {
+            method: "GET",
+            headers: {
+                "x-api-key": API_KEY,
+                "Content-Type": "application/json",
+            },
+        });
         if (!response.ok) {
             console.error(`An error occurred: ${response.statusText}`);
             return;
@@ -68,7 +75,13 @@ export default function Map() {
     };
 
     const fetchLoadCountRecord = async () => {
-        const response = await fetch(`${API_URL}/load_count`);
+        const response = await fetch(`${API_URL}/load_count`, {
+            method: "GET",
+            headers: {
+                "x-api-key": API_KEY,
+                "Content-Type": "application/json",
+            },
+        });
         if (!response.ok) {
             console.error(`An error occurred: ${response.statusText}`);
             return;
@@ -81,6 +94,7 @@ export default function Map() {
         await fetch(`${API_URL}/load_count`, {
             method: "PATCH",
             headers: {
+                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
             },
         });
@@ -90,6 +104,7 @@ export default function Map() {
         await fetch(`${API_URL}/load_count/period`, {
             method: "PATCH",
             headers: {
+                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
             },
         });
