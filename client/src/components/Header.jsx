@@ -46,7 +46,7 @@ export default function Header({
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             const credits = document.getElementById("credits");
             const audio = document.getElementById("music");
-            map.fitBounds(INITIAL_MAP_SETTINGS.bounds, { duration: 500 });
+            map.fitBounds(INITIAL_MAP_SETTINGS.bounds, { duration: 0 });
 
             if (creditsMusic) {
                 cancelCredits();
@@ -63,7 +63,7 @@ export default function Header({
                         zoom: 0,
                         duration: 352000,
                     });
-                }, 500);
+                }, 100);
             }
         } else {
             playSound("die_roll.mp3");
