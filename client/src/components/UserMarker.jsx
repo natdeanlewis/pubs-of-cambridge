@@ -28,5 +28,5 @@ export default function UserMarker({ longitude, latitude, map }) {
         return () => {
             userMarker.remove();
         };
-    }, [longitude, latitude]);
+    }, [longitude, latitude, map]);
 }
