@@ -161,7 +161,7 @@ export default function Header({
             "🎶/⏸️ Toggles the music";
 
         if (pubs.length > 0 && visitedPubs.length === pubs.length) {
-            alert_string += "\n🐬 ???"
+            alert_string += "\n🐬 ???";
         }
         alert(alert_string);
     };
