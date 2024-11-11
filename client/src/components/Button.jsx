@@ -5,7 +5,7 @@ export default function Button({ label, handleClickAction, style }) {
             " bg-yellow-700 active:bg-yellow-900";
     } else {
         classes +=
-            " bg-gray-500 focus:bg-gray-500 hover:bg-gray-700 active:bg-gray-700";
+            " bg-gray-400 active:bg-gray-600";
     }
 
     return (
