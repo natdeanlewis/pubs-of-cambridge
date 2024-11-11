@@ -3,6 +3,7 @@ import mapboxgl from "mapbox-gl";
 import Message from "./Message";
 import Header from "./Header";
 import UserMarker from "./UserMarker";
+import forge from "node-forge";
 
 const MAPBOX_USAGE_LIMIT = 50000;
 const INITIAL_LATITUDE = 52.207;
@@ -23,6 +24,7 @@ const MAP_STYLE =
     "mapbox://styles/natdeanlewis/cm31fd4i300vc01pigpm06fr3/draft";
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
+const PUBLIC_KEY = import.meta.env.VITE_PUBLIC_KEY;
 
 export default function Map() {
     const mapRef = useRef();
@@ -42,12 +44,26 @@ export default function Map() {
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
 
+    function newEncryptedApiKey() {
+        const publicKey = forge.pki.publicKeyFromPem(PUBLIC_KEY);
+
+        const timestamp = Date.now() + 60000;
+
+        const payload = JSON.stringify({ API_KEY, timestamp });
+
+        const encrypted = publicKey.encrypt(payload, "RSA-OAEP");
+
+        const base64Encrypted = btoa(encrypted);
+
+        return base64Encrypted;
+    }
+
     const fetchPubs = async () => {
         const response = await fetch(`${API_URL}/pubs`, {
             method: "GET",
             headers: {
-                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
+                Authorization: "Bearer " + newEncryptedApiKey(),
             },
         });
         if (!response.ok) {
@@ -78,8 +94,8 @@ export default function Map() {
         const response = await fetch(`${API_URL}/load_count`, {
             method: "GET",
             headers: {
-                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
+                Authorization: "Bearer " + newEncryptedApiKey(),
             },
         });
         if (!response.ok) {
@@ -94,8 +110,8 @@ export default function Map() {
         await fetch(`${API_URL}/load_count`, {
             method: "PATCH",
             headers: {
-                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
+                Authorization: "Bearer " + newEncryptedApiKey(),
             },
         });
     };
@@ -104,8 +120,8 @@ export default function Map() {
         await fetch(`${API_URL}/load_count/period`, {
             method: "PATCH",
             headers: {
-                "x-api-key": API_KEY,
                 "Content-Type": "application/json",
+                Authorization: "Bearer " + newEncryptedApiKey(),
             },
         });
     };

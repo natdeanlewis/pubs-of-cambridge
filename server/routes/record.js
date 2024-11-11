@@ -1,4 +1,5 @@
 import express from "express";
+import forge from "node-forge";
 
 import db from "../db/connection.js";
 
@@ -6,17 +7,59 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-const apiKeyMiddleware = (req, res, next) => {
+const apiKeyMiddleware = async (req, res, next) => {
     const origin = req.get("Origin");
-    const apiKey = req.get("x-api-key");
-    if (
-        origin !== process.env.CLIENT_ORIGIN ||
-        apiKey !== process.env.SERVER_API_KEY
-    ) {
+
+    if (origin !== process.env.CLIENT_ORIGIN) {
         return res.status(403).json({ message: "Forbidden" });
     }
+
+    try {
+        const decryptedApiKey = await decryptBearerToken(req, res);
+        if (decryptedApiKey !== process.env.SERVER_API_KEY) {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+    } catch (error) {
+        return res.status(401).json({ message: error.message });
+    }
+
     next();
 };
+
+async function decryptBearerToken(req, res) {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+        throw new Error("Authorization header missing");
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+        throw new Error("Bearer token missing");
+    }
+
+    return await decryptApiKey(token);
+}
+
+async function decryptApiKey(token) {
+    const privateKey = forge.pki.privateKeyFromPem(process.env.PRIVATE_KEY);
+
+    const base64Decrypted = atob(token);
+
+    const encryptedBuffer = new Uint8Array(
+        base64Decrypted.split("").map((char) => char.charCodeAt(0))
+    );
+
+    const decrypted = privateKey.decrypt(encryptedBuffer, "RSA-OAEP");
+
+    const payload = JSON.parse(decrypted);
+
+    if (Date.now() > payload.timestamp) {
+        throw new Error("API key has expired");
+    }
+
+    return payload.API_KEY;
+}
 
 router.use(apiKeyMiddleware);
 
