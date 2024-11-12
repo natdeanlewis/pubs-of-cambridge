@@ -348,7 +348,7 @@ export default function Map() {
     return (
         <div className="relative h-dvh">
             {initializing && (
-                <div className="fixed w-full h-full bg-yellow-900 z-50 flex items-center justify-center">
+                <div className="fixed w-full h-full bg-yellow-950 z-50 flex items-center justify-center">
                     <div className="absolute w-32 h-32">
                         <img src="cheers_empty.png" />
                     </div>
