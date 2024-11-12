@@ -44,7 +44,6 @@ export default function Map() {
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
     const [initializing, setInitializing] = useState(true);
-    const [pointerCount, setPointerCount] = useState(0);
 
     function newEncryptedApiKey() {
         const publicKey = forge.pki.publicKeyFromPem(PUBLIC_KEY);
@@ -130,19 +129,6 @@ export default function Map() {
 
     useEffect(() => {
         fetchLoadCountRecord();
-        const addPointer = () => setPointerCount((prevCount) => prevCount + 1);
-        const removePointer = () =>
-            setPointerCount((prevCount) => prevCount - 1);
-
-        window.addEventListener("pointerdown", addPointer, true);
-        window.addEventListener("pointerup", removePointer, true);
-        window.addEventListener("pointercancel", removePointer, true);
-
-        return () => {
-            window.removeEventListener("pointerdown", addPointer, true);
-            window.removeEventListener("pointerup", removePointer, true);
-            window.removeEventListener("pointercancel", removePointer, true);
-        };
     }, []);
 
     const billingPeriodIsCurrent = () => {
@@ -331,9 +317,6 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
-        if (pointerCount != 1) {
-            return;
-        }
         if (creditsMusic) {
             cancelCredits();
         }
