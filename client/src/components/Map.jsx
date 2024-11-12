@@ -59,14 +59,18 @@ export default function Map() {
             }
         };
 
+        const handleTouchCancel = (e) => {
+            setMultiTouchActive(false);
+        };
+
         window.addEventListener("touchstart", handleTouchStart);
         window.addEventListener("touchend", handleTouchEnd);
-        window.addEventListener("touchcancel", handleTouchEnd);
+        window.addEventListener("touchcancel", handleTouchCancel);
 
         return () => {
             window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
-            window.removeEventListener("touchcancel", handleTouchEnd);
+            window.removeEventListener("touchcancel", handleTouchCancel);
         };
     }, []);
 
