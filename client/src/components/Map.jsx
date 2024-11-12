@@ -44,7 +44,7 @@ export default function Map() {
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
     const [initializing, setInitializing] = useState(true);
-    
+
     function newEncryptedApiKey() {
         const publicKey = forge.pki.publicKeyFromPem(PUBLIC_KEY);
 
@@ -347,7 +347,10 @@ export default function Map() {
             {initializing && (
                 <div className="fixed w-full h-full bg-yellow-950 z-50 flex items-center justify-center">
                     <div className="absolute w-32 h-32">
-                        <img src="cheers_empty.png" />
+                        <img
+                            src="cheers_empty.png"
+                            className="loading-image-background"
+                        />
                     </div>
                     <div className="absolute w-32 h-32">
                         <img src="cheers_full.png" className="loading-image" />
