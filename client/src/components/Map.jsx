@@ -178,6 +178,9 @@ export default function Map() {
 
                 mapRef.current.addControl(nav, "bottom-right");
                 mapRef.current.doubleClickZoom.disable();
+                mapRef.current.touchZoomRotate.disableRotation();
+                mapRef.current.dragRotate.disable();
+                mapRef.current.boxZoom.disable();
             };
 
             const initialize = async () => {
@@ -318,6 +321,9 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
+        if (mapRef.current.touchZoomRotate.isActive()) {
+            return;
+        }
         if (creditsMusic) {
             cancelCredits();
         }
