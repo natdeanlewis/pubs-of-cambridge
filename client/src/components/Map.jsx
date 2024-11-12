@@ -47,16 +47,23 @@ export default function Map() {
     const [isZooming, setIsZooming] = useState(false);
 
     useEffect(() => {
+        const handleTouchStart = (e) => {
+            if (e.touches.length > 1) {
+                setIsZooming(true);
+            }
+        };
+
         const handleTouchEnd = (e) => {
             if (e.touches.length === 0) {
                 setIsZooming(false);
             }
         };
-
+        window.addEventListener("touchstart", handleTouchStart);
         window.addEventListener("touchend", handleTouchEnd);
         window.addEventListener("touchcancel", handleTouchEnd);
 
         return () => {
+            window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
             window.removeEventListener("touchcancel", handleTouchEnd);
         };
@@ -284,9 +291,9 @@ export default function Map() {
                 .addTo(mapRef.current);
 
             markers.current.push(marker);
-            el.addEventListener("pointerup", () =>
-                updateVisitedStatus(pub._id)
-            );
+            el.addEventListener("pointerup", () => {
+                updateVisitedStatus(pub._id);
+            });
         });
         setComplete(
             !firstTime && pubs.length > 0 && pubs.length === visitedPubs.length
@@ -302,7 +309,7 @@ export default function Map() {
         if (markers.current.length > 0) {
             setInitializing(false);
         }
-    }, [pubs, visitedPubs, creditsMusic]);
+    }, [pubs, visitedPubs, creditsMusic, isZooming]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement("div");
@@ -339,7 +346,6 @@ export default function Map() {
 
     const updateVisitedStatus = (pubId) => {
         if (isZooming) {
-            console.log(1)
             return;
         }
         if (creditsMusic) {
