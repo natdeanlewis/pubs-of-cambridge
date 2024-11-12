@@ -62,7 +62,7 @@ export default function Map() {
         window.addEventListener("touchstart", handleTouchStart);
         window.addEventListener("touchend", handleTouchEnd);
         window.addEventListener("touchcancel", handleTouchEnd);
- f
+        
         return () => {
             window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
