@@ -59,12 +59,12 @@ export default function Map() {
             }
         };
 
-        window.addEventListener("pointerdown", handleTouchStart);
-        window.addEventListener("pointerup", handleTouchEnd);
+        window.addEventListener("touchstart", handleTouchStart);
+        window.addEventListener("touchend", handleTouchEnd);
 
         return () => {
-            window.removeEventListener("pointerdown", handleTouchStart);
-            window.removeEventListener("pointerup", handleTouchEnd);
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchend", handleTouchEnd);
         };
     }, []);
 
