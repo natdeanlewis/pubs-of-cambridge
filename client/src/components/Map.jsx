@@ -44,31 +44,7 @@ export default function Map() {
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
     const [initializing, setInitializing] = useState(true);
-    const [isZooming, setIsZooming] = useState(false);
-
-    useEffect(() => {
-        const handleTouchStart = (e) => {
-            if (e.touches.length > 1) {
-                setIsZooming(true);
-            }
-        };
-
-        const handleTouchEnd = (e) => {
-            if (e.touches.length === 0) {
-                setIsZooming(false);
-            }
-        };
-        window.addEventListener("touchstart", handleTouchStart);
-        window.addEventListener("touchend", handleTouchEnd);
-        window.addEventListener("touchcancel", handleTouchEnd);
-
-        return () => {
-            window.removeEventListener("touchstart", handleTouchStart);
-            window.removeEventListener("touchend", handleTouchEnd);
-            window.removeEventListener("touchcancel", handleTouchEnd);
-        };
-    }, []);
-
+    
     function newEncryptedApiKey() {
         const publicKey = forge.pki.publicKeyFromPem(PUBLIC_KEY);
 
@@ -291,7 +267,7 @@ export default function Map() {
                 .addTo(mapRef.current);
 
             markers.current.push(marker);
-            el.addEventListener("pointerup", () => {
+            el.addEventListener("click", () => {
                 updateVisitedStatus(pub._id);
             });
         });
@@ -309,7 +285,7 @@ export default function Map() {
         if (markers.current.length > 0) {
             setInitializing(false);
         }
-    }, [pubs, visitedPubs, creditsMusic, isZooming]);
+    }, [pubs, visitedPubs, creditsMusic]);
 
     const createMarkerElement = (pub) => {
         const el = document.createElement("div");
@@ -345,9 +321,6 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
-        if (isZooming) {
-            return;
-        }
         if (creditsMusic) {
             cancelCredits();
         }
