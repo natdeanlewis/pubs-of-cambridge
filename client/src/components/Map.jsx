@@ -177,6 +177,7 @@ export default function Map() {
                 });
 
                 mapRef.current.addControl(nav, "bottom-right");
+                mapRef.current.doubleClickZoom.disable();
             };
 
             const initialize = async () => {
