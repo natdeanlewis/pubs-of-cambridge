@@ -263,7 +263,7 @@ export default function Map() {
                 .addTo(mapRef.current);
 
             markers.current.push(marker);
-            el.addEventListener("pointerdown", () =>
+            el.addEventListener("pointerup", () =>
                 updateVisitedStatus(pub._id)
             );
         });
