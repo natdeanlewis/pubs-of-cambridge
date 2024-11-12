@@ -171,6 +171,12 @@ export default function Map() {
                     style: MAP_STYLE,
                     ...INITIAL_MAP_SETTINGS,
                 });
+                var nav = new mapboxgl.NavigationControl({
+                    showCompass: false,
+                    showZoom: true,
+                });
+
+                mapRef.current.addControl(nav, "bottom-right");
             };
 
             const initialize = async () => {
@@ -257,7 +263,7 @@ export default function Map() {
                 .addTo(mapRef.current);
 
             markers.current.push(marker);
-            el.addEventListener("pointerup", () =>
+            el.addEventListener("pointerdown", () =>
                 updateVisitedStatus(pub._id)
             );
         });
