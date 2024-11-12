@@ -10,7 +10,7 @@ npm run dev
 
 run db server locally from /server:
 
-node --env-file=config.env server
+node --env-file=.env.server server
 
 -   prod:
 
