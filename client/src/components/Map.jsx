@@ -44,33 +44,21 @@ export default function Map() {
     const [userPosition, setUserPosition] = useState(null);
     const [firstTime, setFirstTime] = useState(true);
     const [initializing, setInitializing] = useState(true);
-    const [multiTouchActive, setMultiTouchActive] = useState(false);
+    const [isZooming, setIsZooming] = useState(false);
 
     useEffect(() => {
-        const handleTouchStart = (e) => {
-            if (e.touches.length > 1) {
-                setMultiTouchActive(true);
-            }
-        };
-
         const handleTouchEnd = (e) => {
             if (e.touches.length === 0) {
-                setMultiTouchActive(false);
+                setIsZooming(false);
             }
         };
 
-        const handleTouchCancel = (e) => {
-            setMultiTouchActive(false);
-        };
-
-        window.addEventListener("touchstart", handleTouchStart);
         window.addEventListener("touchend", handleTouchEnd);
-        window.addEventListener("touchcancel", handleTouchCancel);
+        window.addEventListener("touchcancel", handleTouchEnd);
 
         return () => {
-            window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
-            window.removeEventListener("touchcancel", handleTouchCancel);
+            window.removeEventListener("touchcancel", handleTouchEnd);
         };
     }, []);
 
@@ -350,7 +338,8 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
-        if (multiTouchActive) {
+        if (isZooming) {
+            console.log(1)
             return;
         }
         if (creditsMusic) {
