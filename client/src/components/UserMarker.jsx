@@ -6,8 +6,7 @@ export default function UserMarker({ longitude, latitude, map }) {
         if (!map) return;
 
         const userMarker = document.createElement("div");
-        userMarker.className = "group hover:z-20";
-        userMarker.style.zIndex = "10";
+        userMarker.className = "group z-20";
 
         userMarker.innerHTML = `
             <span class="relative flex items-center justify-center text-2xl">

@@ -56,3 +56,7 @@
 .mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib {
   margin-bottom: env(safe-area-inset-bottom) !important;
 }
+
+.mapboxgl-marker-semi-transparent {
+  opacity: 0.5 !important
+}

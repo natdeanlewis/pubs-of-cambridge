@@ -296,10 +296,15 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement("div");
-        el.className = "group hover:z-20";
-        el.style.backgroundImage = visitedPubs.includes(pub._id)
-            ? "url(cheers_full.png)"
-            : "url(cheers_empty.png)";
+        el.className = "group";
+        el.style.backgroundImage = "url(cheers_full.png)";
+        if (visitedPubs.includes(pub._id)) {
+            el.classList.add("mapboxgl-marker-semi-transparent");
+            el.classList.add("z-0");
+        } else {
+            el.classList.add("z-10");
+            el.classList.add("hover:z-30");
+        }
         el.style.width = "40px";
         el.style.height = "40px";
         el.style.backgroundSize = "100%";
