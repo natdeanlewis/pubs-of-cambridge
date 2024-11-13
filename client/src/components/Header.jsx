@@ -193,7 +193,7 @@ export default function Header({
 
     return (
         <div>
-            <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30">
+            <div className="absolute flex flex-col sm:flex-row top-4 left-4 z-30 safe-area">
                 <Button label="🏠" handleClickAction={handleResetViewClick} />
                 <Button
                     label={music ? "⏸️" : "🎶"}
@@ -217,7 +217,7 @@ export default function Header({
                 />
             </div>
 
-            <div className="absolute inline-flex top-4 right-4 z-30">
+            <div className="absolute inline-flex top-4 right-4 z-30 safe-area">
                 <Total pubs={pubs} visitedPubs={visitedPubs} />
                 <Button label="ℹ️" handleClickAction={handleInfoClick} />
             </div>
