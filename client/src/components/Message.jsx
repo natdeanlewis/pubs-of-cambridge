@@ -45,7 +45,9 @@ export default function Message({
         if (randomPub) {
             setMessage(`How about... The ${randomPub.name}?`);
         } else if (nearestPub) {
-            setMessage(`Your nearest pub is... The ${nearestPub.name}!`);
+            setMessage(
+                `Your nearest unvisited pub is: The ${nearestPub.name}!`
+            );
             setLoading(false);
         } else if (creditsMusic) {
             setMessage(null);
@@ -91,7 +93,7 @@ export default function Message({
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`);
         } else if (loading) {
-            setMessage(`Looking for your nearest pub...`);
+            setMessage(`Looking for pubs near you...`);
         } else {
             setMessage(null);
         }

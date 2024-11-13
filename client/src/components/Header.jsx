@@ -101,8 +101,11 @@ export default function Header({
     function calculateNearestPub(position) {
         let minDistance = Infinity;
         let nearestPub = null;
+        const unvisitedPubs = pubs.filter(
+            (pub) => !visitedPubs.includes(pub._id)
+        );
 
-        pubs.forEach((pub) => {
+        unvisitedPubs.forEach((pub) => {
             const distance =
                 Math.pow(pub.latitude - position.coords.latitude, 2) +
                 Math.pow(pub.longitude - position.coords.longitude, 2);
@@ -123,7 +126,12 @@ export default function Header({
         }
         setComplete(null);
         setRandomPub(null);
-        setLoading(true);
+        const complete = pubs.length > 0 && pubs.length === visitedPubs.length;
+        if (complete) {
+            return setComplete(true);
+        } else {
+            setLoading(true);
+        }
         if (pubs.length === 0) return;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -156,7 +164,7 @@ export default function Header({
             "Welcome, traveller!\n\n" +
             "🍻 Click a pub to mark it as visited\n" +
             "🎲 Recommends a random unvisited pub\n" +
-            "📍 Finds your nearest pub\n" +
+            "📍 Finds your nearest unvisited pub\n" +
             "🏠 Resets the view\n" +
             "🎶/⏸️ Toggles the music";
 
