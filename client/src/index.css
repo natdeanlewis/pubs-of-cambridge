@@ -58,5 +58,6 @@
 }
 
 .mapboxgl-marker-semi-transparent {
-  opacity: 0.5 !important
+  opacity: 0.5 !important;
+  filter: brightness(1.2) contrast(1.2) saturate(0.6);
 }
