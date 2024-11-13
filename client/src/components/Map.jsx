@@ -172,7 +172,6 @@ export default function Map() {
                     ...INITIAL_MAP_SETTINGS,
                 });
 
-                mapRef.current.addControl(nav, "bottom-right");
                 mapRef.current.doubleClickZoom.disable();
                 mapRef.current.touchZoomRotate.disableRotation();
                 mapRef.current.dragRotate.disable();

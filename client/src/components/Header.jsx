@@ -149,7 +149,7 @@ export default function Header({
                 (error) => {
                     console.error("Error getting location:", error);
                     alert(
-                        "Share your location to enable finding your nearest pub"
+                        "Share your location to enable finding your nearest unvisited pub"
                     );
                 }
             );
