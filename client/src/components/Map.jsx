@@ -326,7 +326,12 @@ export default function Map() {
 
         const label = document.createElement("div");
         label.className =
-            "absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic";
+            "absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 font-serif italic";
+        if (Capacitor.getPlatform() === "web") {
+            label.classList.add("group-hover:opacity-100");
+        } else {
+            label.classList.add("group-active:opacity-100");
+        }
         label.textContent = `The ${pub.name}`;
         if (visitedPubs.includes(pub._id)) {
             label.classList.add("mapboxgl-marker-semi-transparent-label");
@@ -336,7 +341,10 @@ export default function Map() {
 
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
-            if (zoom > 16 || (zoom > 13.5 && !visitedPubs.includes(pub._id))) {
+            if (
+                zoom > 15.5 ||
+                (zoom > 13.5 && !visitedPubs.includes(pub._id))
+            ) {
                 label.style.opacity = "1";
             } else {
                 label.style.opacity = null;
