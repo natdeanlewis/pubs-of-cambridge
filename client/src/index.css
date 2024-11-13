@@ -58,7 +58,7 @@
 }
 
 .mapboxgl-marker-semi-transparent {
-  opacity: 0.5 !important
+  opacity: 0.4 !important
 }
 
 .mapboxgl-marker-semi-transparent:hover {
