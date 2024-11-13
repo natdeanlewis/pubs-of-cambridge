@@ -28,3 +28,11 @@ we use an RSA private/public key pair to encrypt the API_KEY with the requests t
 for remote debugging, use
 npm run dev -- --host
 and replace localhost in the .env and config.env with your local IP
+
+-   ios app:
+
+when changes made to the client app, run
+
+npm run build
+npx cap sync ios
+npx cap open ios
