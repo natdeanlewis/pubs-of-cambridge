@@ -314,6 +314,9 @@ export default function Map() {
         label.className =
             "absolute bottom-[-15px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-serif italic";
         label.textContent = `The ${pub.name}`;
+        if (visitedPubs.includes(pub._id)) {
+            label.classList.add("mapboxgl-marker-semi-transparent-label");
+        }
 
         el.appendChild(label);
 
