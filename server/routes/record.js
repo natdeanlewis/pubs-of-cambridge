@@ -8,12 +8,6 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 const apiKeyMiddleware = async (req, res, next) => {
-    const origin = req.get("Origin");
-
-    if (origin !== process.env.CLIENT_ORIGIN) {
-        return res.status(403).json({ message: "Forbidden" });
-    }
-
     try {
         const decryptedApiKey = await decryptBearerToken(req, res);
         if (decryptedApiKey !== process.env.SERVER_API_KEY) {
