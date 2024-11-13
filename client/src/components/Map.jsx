@@ -282,12 +282,19 @@ export default function Map() {
             });
         }
 
-        if (markers.current.length > 0) {
-            document
-                .getElementById("loading-image-container")
-                .addEventListener("animationiteration", function () {
-                    setInitializing(false);
-                });
+        if (initializing && markers.current.length > 0) {
+            const loadingImageContainer = document.getElementById(
+                "loading-image-container"
+            );
+
+            if (loadingImageContainer) {
+                loadingImageContainer.addEventListener(
+                    "animationiteration",
+                    function () {
+                        setInitializing(false);
+                    }
+                );
+            }
         }
     }, [pubs, visitedPubs, creditsMusic]);
 
