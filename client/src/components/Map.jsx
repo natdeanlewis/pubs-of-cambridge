@@ -283,7 +283,11 @@ export default function Map() {
         }
 
         if (markers.current.length > 0) {
-            setInitializing(false);
+            document
+                .getElementById("loading-image-container")
+                .addEventListener("animationiteration", function () {
+                    setInitializing(false);
+                });
         }
     }, [pubs, visitedPubs, creditsMusic]);
 
@@ -346,7 +350,10 @@ export default function Map() {
         <div className="relative h-dvh">
             {initializing && (
                 <div className="fixed inset-0 bg-yellow-950 z-50 flex items-center justify-center">
-                    <div className="relative w-32 h-32 loading-image-container">
+                    <div
+                        id="loading-image-container"
+                        className="relative w-32 h-32 loading-image-container"
+                    >
                         <img
                             src="cheers_empty.png"
                             className="absolute inset-0 w-full h-full object-contain loading-image-background"
