@@ -3,34 +3,45 @@
 @tailwind utilities;
 
 .loading-image {
-  opacity: 0;
+  opacity: 1;
   clip-path: inset(100% 0 0 0);
-  animation: reveal 1s ease-in-out forwards infinite;
+  animation: reveal 3s ease-in-out forwards infinite;
 }
 
 .loading-image-background {
   clip-path: inset(20% 0 0 0);
 }
 
+.loading-image-container {
+  animation: spin 3s ease-in-out forwards infinite;
+}
+
 @keyframes reveal {
   0% {
-    opacity: 1;
     clip-path: inset(100% 0 0 0);
   }
+  60% {
+    clip-path: inset(20% 0 0 0);
+  }
   65% {
-    opacity: 1;
     clip-path: inset(20% 0 0 0);
   }
-  75% {
-    opacity: 1;
-    clip-path: inset(20% 0 0 0);
-  }
-  75.01% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
+  90% {
+    clip-path: inset(20% 0 100% 0);
   }
   100% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
+    clip-path: inset(20% 0 100% 0);
+  }
+}
+
+@keyframes spin {
+  60% {
+    transform: none;
+  }
+  80% {
+    transform: rotate(135deg);
+  }
+  90% {
+    transform: rotate(135deg);
   }
 }
