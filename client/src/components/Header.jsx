@@ -202,7 +202,11 @@ export default function Header({
             "🎶/⏸️ Toggles the music";
 
         if (pubs.length > 0 && visitedPubs.length === pubs.length) {
-            alert_string += "\n🐬 ???";
+            alert_string =
+                "Congratulations, you've visited every pub in Cambridge!\n\n" +
+                "🏠 Resets the view\n" +
+                "🎶/⏸️ Toggles the music" +
+                "\n🐬 ???";
         }
         alert(alert_string);
     };
@@ -251,11 +255,13 @@ export default function Header({
                     handleClickAction={handleRandomPubClick}
                     style="brown"
                 />
-                <Button
-                    label="📍"
-                    handleClickAction={handleNearestPubClick}
-                    style="brown"
-                />
+                {!(pubs.length > 0 && pubs.length === visitedPubs.length) && (
+                    <Button
+                        label="📍"
+                        handleClickAction={handleNearestPubClick}
+                        style="brown"
+                    />
+                )}
             </div>
 
             <div className="absolute inline-flex top-4 right-4 z-30 safe-area">
