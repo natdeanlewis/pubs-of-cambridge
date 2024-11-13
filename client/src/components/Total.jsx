@@ -4,7 +4,7 @@ export default function Total({ pubs, visitedPubs }) {
             {pubs.length > 0 && (
                 <p className="m-2 text-white font-bold bg-yellow-900 py-2 px-4 rounded font-serif">
                     <span className="italic">
-                        {`${visitedPubs.length}/${pubs.length} `}
+                        {`${visitedPubs.length}/${pubs.length}`}&nbsp;
                     </span>
 
                     {visitedPubs.length === pubs.length ? (
