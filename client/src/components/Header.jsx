@@ -129,13 +129,13 @@ export default function Header({
         const complete = pubs.length > 0 && pubs.length === visitedPubs.length;
         if (complete) {
             return setComplete(true);
-        } else {
-            setLoading(true);
         }
         if (pubs.length === 0) return;
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
+                    setLoading(true);
+
                     const nearestPub = calculateNearestPub(position);
                     playSound("door.mp3");
 

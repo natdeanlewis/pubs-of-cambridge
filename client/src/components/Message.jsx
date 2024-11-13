@@ -93,7 +93,7 @@ export default function Message({
         } else if (complete) {
             setMessage(`Looks like you're all done... pub?`);
         } else if (loading) {
-            setMessage(`Looking for pubs near you...`);
+            setMessage(`Finding your nearest unvisited pub...`);
         } else {
             setMessage(null);
         }
