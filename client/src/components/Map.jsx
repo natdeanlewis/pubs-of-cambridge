@@ -171,10 +171,6 @@ export default function Map() {
                     style: MAP_STYLE,
                     ...INITIAL_MAP_SETTINGS,
                 });
-                var nav = new mapboxgl.NavigationControl({
-                    showCompass: false,
-                    showZoom: true,
-                });
 
                 mapRef.current.addControl(nav, "bottom-right");
                 mapRef.current.doubleClickZoom.disable();
