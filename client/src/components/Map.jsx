@@ -322,7 +322,7 @@ export default function Map() {
 
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
-            if (zoom > 15.5 || (zoom > 13.5 && !visitedPubs.includes(pub._id))) {
+            if (zoom > 16 || (zoom > 13.5 && !visitedPubs.includes(pub._id))) {
                 label.style.opacity = "1";
             } else {
                 label.style.opacity = null;
