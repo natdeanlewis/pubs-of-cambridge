@@ -1,6 +1,8 @@
 import Button from "./Button";
 import Total from "./Total";
 import Music from "./Music";
+import { Capacitor } from "@capacitor/core";
+import { Geolocation } from "@capacitor/geolocation";
 
 export default function Header({
     pubs,
@@ -131,28 +133,38 @@ export default function Header({
             return setComplete(true);
         }
         if (pubs.length === 0) return;
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    setLoading(true);
+        const showNearestPub = (position) => {
+            try {
+                setLoading(true);
 
-                    const nearestPub = calculateNearestPub(position);
-                    playSound("door.mp3");
+                const nearestPub = calculateNearestPub(position);
+                playSound("door.mp3");
 
-                    if (nearestPub) {
-                        map.flyTo({
-                            center: [nearestPub.longitude, nearestPub.latitude],
-                            zoom: 16,
-                        });
-                    }
-                },
-                (error) => {
-                    console.error("Error getting location:", error);
-                    alert(
-                        "Share your location to enable finding your nearest unvisited pub"
-                    );
+                if (nearestPub) {
+                    map.flyTo({
+                        center: [nearestPub.longitude, nearestPub.latitude],
+                        zoom: 16,
+                    });
                 }
-            );
+            } catch (error) {
+                console.error("Error getting location:", error);
+                alert(
+                    "Share your location to enable finding your nearest unvisited pub"
+                );
+            }
+        };
+        const getPositionAndCalculateNearestPubApp = async () => {
+            const position = await Geolocation.getCurrentPosition();
+            if (position) {
+                showNearestPub(position);
+            }
+        };
+        if (Capacitor.getPlatform() === "web") {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showNearestPub);
+            }
+        } else {
+            getPositionAndCalculateNearestPubApp();
         }
     };
 

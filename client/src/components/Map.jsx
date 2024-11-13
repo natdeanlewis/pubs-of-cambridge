@@ -4,6 +4,8 @@ import Message from "./Message";
 import Header from "./Header";
 import UserMarker from "./UserMarker";
 import forge from "node-forge";
+import { Capacitor } from "@capacitor/core";
+import { Geolocation } from "@capacitor/geolocation";
 
 const MAPBOX_USAGE_LIMIT = 50000;
 const INITIAL_LATITUDE = 52.207;
@@ -184,13 +186,26 @@ export default function Map() {
 
             initialize();
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    setUserPosition({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                    });
+            const updatePosition = (position) => {
+                setUserPosition({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
                 });
+            };
+
+            const getAndUpdatePositionApp = async () => {
+                const position = await Geolocation.getCurrentPosition();
+                if (position) {
+                    updatePosition(position);
+                }
+            };
+
+            if (Capacitor.getPlatform() === "web") {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(updatePosition);
+                }
+            } else {
+                getAndUpdatePositionApp();
             }
 
             return () => {
