@@ -345,20 +345,16 @@ export default function Map() {
     return (
         <div className="relative h-dvh">
             {initializing && (
-                <div className="fixed w-full h-full bg-yellow-950 z-50 flex items-center justify-center">
-                    <div className="w-32 h-32 loading-image-container">
-                        <div className="absolute">
-                            <img
-                                src="cheers_empty.png"
-                                className="loading-image-background"
-                            />
-                        </div>
-                        <div className="absolute">
-                            <img
-                                src="cheers_full.png"
-                                className="loading-image"
-                            />
-                        </div>
+                <div className="fixed inset-0 bg-yellow-950 z-50 flex items-center justify-center">
+                    <div className="relative w-32 h-32 loading-image-container">
+                        <img
+                            src="cheers_empty.png"
+                            className="absolute inset-0 w-full h-full object-contain loading-image-background"
+                        />
+                        <img
+                            src="cheers_full.png"
+                            className="absolute inset-0 w-full h-full object-contain loading-image"
+                        />
                     </div>
                 </div>
             )}
