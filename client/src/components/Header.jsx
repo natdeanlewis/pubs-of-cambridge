@@ -166,15 +166,15 @@ export default function Header({
                         const nearestPub = calculateNearestPub(position);
                         playSound("door.mp3");
 
-                        // if (nearestPub) {
-                        //     map.flyTo({
-                        //         center: [
-                        //             nearestPub.longitude,
-                        //             nearestPub.latitude,
-                        //         ],
-                        //         zoom: 16,
-                        //     });
-                        // }
+                        if (nearestPub) {
+                            map.flyTo({
+                                center: [
+                                    nearestPub.longitude,
+                                    nearestPub.latitude,
+                                ],
+                                zoom: 16,
+                            });
+                        }
                     },
                     (error) => {
                         console.error("Error getting location:", error);
