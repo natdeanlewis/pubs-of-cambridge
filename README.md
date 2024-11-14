@@ -31,7 +31,7 @@ and replace localhost in the .env and config.env with your local IP
 
 -   ios app:
 
-when changes made to the client app, run
+when changes made to the client app, run (in /client):
 
 npm run build
 npx cap sync ios
