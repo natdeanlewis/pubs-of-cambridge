@@ -326,7 +326,7 @@ export default function Map() {
         if (pub.length > 0 && pubs.length === visitedPubs.length) {
             el.classList.add("animate-bounce");
             const randomColour = Math.floor(Math.random * 4) * 90
-            el.style.filter = 'hue-rotate(' + randomColour + 'deg)'
+            el.style.filter = 'hue-rotate(' + randomColour + 'deg) !important'
         }
 
         const label = document.createElement("div");
