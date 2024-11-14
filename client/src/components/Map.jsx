@@ -312,7 +312,7 @@ export default function Map() {
         const el = document.createElement("div");
         el.className = "group";
         el.style.backgroundImage = "url(cheers_full.png)";
-        if (visitedPubs.includes(pub._id)) {
+        if (visitedPubs.includes(pub._id) && pubs.length != visitedPubs.length) {
             el.classList.add("mapboxgl-marker-semi-transparent");
             el.classList.add("z-0");
         } else {
@@ -337,9 +337,6 @@ export default function Map() {
             label.classList.add("group-active:opacity-100");
         }
         label.textContent = `The ${pub.name}`;
-        if (visitedPubs.includes(pub._id) && pubs.length != visitedPubs.length) {
-            label.classList.add("mapboxgl-marker-semi-transparent-label");
-        }
 
         el.appendChild(label);
 
