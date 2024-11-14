@@ -324,7 +324,7 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const randomColour = Math.floor(Math.random() * 4) * 90;
+            const randomColour = (Math.floor(Math.random() * 5) + 1) * 60;
             el.style.filter = `hue-rotate(${randomColour}deg`;
 
         }
