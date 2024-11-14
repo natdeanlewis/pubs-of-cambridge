@@ -324,8 +324,6 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            el.classList.add("animate-bounce");
-            el.classList.add("absolute")
             const randomColour = Math.floor(Math.random * 4) * 90
             el.style.filter = 'hue-rotate(' + randomColour.toString() + 'deg) !important'
         }
@@ -339,7 +337,7 @@ export default function Map() {
             label.classList.add("group-active:opacity-100");
         }
         label.textContent = `The ${pub.name}`;
-        if (visitedPubs.includes(pub._id)) {
+        if (visitedPubs.includes(pub._id) && pubs.length != visitedPubs.length) {
             label.classList.add("mapboxgl-marker-semi-transparent-label");
         }
 
