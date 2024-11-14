@@ -4,14 +4,10 @@ export default function Total({ pubs, visitedPubs }) {
             {pubs.length > 0 && (
                 <p className="m-2 text-white font-bold bg-yellow-900 py-2 px-4 rounded font-serif">
                     <span className="italic">
-                        {`${visitedPubs.length}/${pubs.length}`}&nbsp;&nbsp;
+                        {`${visitedPubs.length}/${pubs.length}`}
                     </span>
 
-                    {visitedPubs.length === pubs.length ? (
-                        "🥳"
-                    ) : (
-                        <img src="cheers_full.png" className="h-5 inline"></img>
-                    )}
+                    {visitedPubs.length === pubs.length ? " 🥳" : " 🍻"}
                 </p>
             )}
         </div>
