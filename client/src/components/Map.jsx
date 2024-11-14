@@ -325,6 +325,7 @@ export default function Map() {
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             el.classList.add("animate-bounce");
+            el.classList.add("absolute")
             const randomColour = Math.floor(Math.random * 4) * 90
             el.style.filter = 'hue-rotate(' + randomColour.toString() + 'deg) !important'
         }
