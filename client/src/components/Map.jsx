@@ -328,7 +328,7 @@ export default function Map() {
             el.style.filter = `hue-rotate(${randomColour}deg`;
             var bounceWrapper = document.createElement('div');
             bounceWrapper.className = 'w-full h-full flex justify-center items-center animate-bounce';
-            markerElement.appendChild(bounceWrapper);
+            el.appendChild(bounceWrapper);
         
         }
 
