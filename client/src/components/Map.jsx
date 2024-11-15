@@ -310,9 +310,9 @@ export default function Map() {
 
     const createMarkerElement = (pub) => {
         const el = document.createElement("div");
-        el.className = "group absolute";
+        el.className = "group";
         el.style.backgroundImage = "url(cheers_full.png)";
-        if (visitedPubs.includes(pub._id) && pubs.length != visitedPubs.length) {
+        if (visitedPubs.includes(pub._id)) {
             el.classList.add("mapboxgl-marker-semi-transparent");
             el.classList.add("z-0");
         } else {
@@ -326,12 +326,6 @@ export default function Map() {
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             const randomDegree = Math.floor(Math.random() * 360);
             el.style.filter = `hue-rotate(${randomDegree}deg)`;
-            el.innerHTML = `
-            <span class="relative flex items-center justify-center" style="backgroundImage: url(cheers_full.png)">
-                <span class="animate-bounce absolute inline-flex"></span>
-            </span>
-        `;
-
         }
 
         const label = document.createElement("div");
