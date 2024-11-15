@@ -325,11 +325,22 @@ export default function Map() {
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
             const randomColour = (Math.floor(Math.random() * 5) + 1) * 60;
-            el.style.filter = `hue-rotate(${randomColour}deg`;
+            const rainbowColors = [
+                'hsl(0, 100%, 50%)',
+                'hsl(30, 100%, 50%)',
+                'hsl(60, 100%, 50%)',
+                'hsl(120, 100%, 50%)',
+                'hsl(180, 100%, 50%)',
+                'hsl(240, 100%, 50%)',
+                'hsl(280, 100%, 50%)'
+              ];
+              
+            const randomColor = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
+            
+            el.style.backgroundColor = randomColor;
             var bounceWrapper = document.createElement('div');
             bounceWrapper.className = 'w-full h-full flex justify-center items-center animate-bounce';
             el.appendChild(bounceWrapper);
-        
         }
 
         const label = document.createElement("div");
