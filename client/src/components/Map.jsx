@@ -338,9 +338,11 @@ export default function Map() {
             const randomColor = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
             
             el.style.backgroundColor = randomColor;
-            var bounceWrapper = document.createElement('div');
-            bounceWrapper.className = 'w-full h-full flex justify-center items-center animate-bounce';
-            el.appendChild(bounceWrapper);
+            el.innerHTML = `
+            <span class="relative">
+                <span class="animate-bounce absolute "></span>
+            </span>
+        `;
         }
 
         const label = document.createElement("div");
