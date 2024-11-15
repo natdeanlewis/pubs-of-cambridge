@@ -41,7 +41,6 @@ export default function Header({
             cancelCredits();
         }
         setNearestPub(null);
-        setComplete(null);
         setRandomPub(null);
         setMessage(null);
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);

@@ -40,8 +40,8 @@ export default function Map() {
     const [nearestPub, setNearestPub] = useState(null);
     const [loading, setLoading] = useState(null);
     const [complete, setComplete] = useState(null);
-    const [music, setMusic] = useState(null);
-    const [creditsMusic, setCreditsMusic] = useState(null);
+    const [music, setMusic] = useState(false);
+    const [creditsMusic, setCreditsMusic] = useState(false);
     const [message, setMessage] = useState(null);
     const [loadCountRecord, setLoadCountRecord] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
@@ -332,21 +332,24 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            el.style.backgroundImage = "url(cheers_full.png)";
-            el.classList.add("animate-bounce-custom");
-            const scaledDelay =
-                ((pub.longitude - pubLongitudeRange.current.min) /
-                    (pubLongitudeRange.current.max -
-                        pubLongitudeRange.current.min)) *
-                1;
-            el.style.animationDelay = `${scaledDelay}s`;
-            el.addEventListener("animationend", (event) => {
-                if (event.animationName === "rainbow") {
-                    el.classList.remove(
-                        "mapboxgl-marker-semi-transparent-filter"
-                    );
-                }
-            });
+            if (creditsMusic) {
+                el.classList.remove("mapboxgl-marker-semi-transparent-filter");
+            } else {
+                el.classList.add("animate-bounce-custom");
+                const scaledDelay =
+                    ((pub.longitude - pubLongitudeRange.current.min) /
+                        (pubLongitudeRange.current.max -
+                            pubLongitudeRange.current.min)) *
+                    1;
+                el.style.animationDelay = `${scaledDelay}s`;
+                el.addEventListener("animationend", (event) => {
+                    if (event.animationName === "rainbow") {
+                        el.classList.remove(
+                            "mapboxgl-marker-semi-transparent-filter"
+                        );
+                    }
+                });
+            }
         }
 
         const label = document.createElement("div");
