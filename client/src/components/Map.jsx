@@ -324,20 +324,8 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const randomColour = (Math.floor(Math.random() * 5) + 1) * 60;
-            const rainbowColors = [
-                'hsl(0, 100%, 50%)',
-                'hsl(30, 100%, 50%)',
-                'hsl(60, 100%, 50%)',
-                'hsl(120, 100%, 50%)',
-                'hsl(180, 100%, 50%)',
-                'hsl(240, 100%, 50%)',
-                'hsl(280, 100%, 50%)'
-              ];
-              
-            const randomColor = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
-            
-            el.style.textshadow = `1px 1px 0 ${randomColor}, -1px -1px 0 ${randomColor}, -1px 1px 0 ${randomColor}, 1px -1px 0 ${randomColor}`
+            const randomDegree = Math.floor(Math.random() * 360;
+            el.style.filter = `hue-rotate(${randomDegree}deg)`
         }
 
         const label = document.createElement("div");
