@@ -53,7 +53,33 @@
     margin-left: env(safe-area-inset-left);
 }
 
-.mapboxgl-marker-semi-transparent {
+.mapboxgl-marker-semi-transparent-opacity {
   opacity: 0.5 !important;
+}
+.mapboxgl-marker-semi-transparent-filter {
   filter: brightness(1.2) contrast(1.2) saturate(0.3);
+}
+
+@keyframes custom-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+  50% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+}
+
+@keyframes rainbow {
+  0% {
+    filter: hue-rotate(0deg);
+
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+.animate-bounce-custom {
+  animation: rainbow 3s, custom-bounce 1s 3;
 }

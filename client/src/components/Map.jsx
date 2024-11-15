@@ -32,6 +32,7 @@ export default function Map() {
     const mapRef = useRef();
     const mapContainerRef = useRef();
     const markers = useRef([]);
+    const pubLongitudeRange = useRef({});
 
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
@@ -269,6 +270,11 @@ export default function Map() {
 
         markers.current.forEach((marker) => marker.remove());
         markers.current = [];
+        const longitudes = pubs.map((pub) => pub.longitude);
+        pubLongitudeRange.current = {
+            min: Math.min(...longitudes),
+            max: Math.max(...longitudes),
+        };
 
         pubs.forEach((pub) => {
             const el = createMarkerElement(pub);
@@ -309,23 +315,38 @@ export default function Map() {
     }, [pubs, visitedPubs, creditsMusic]);
 
     const createMarkerElement = (pub) => {
+        const container = document.createElement("div");
         const el = document.createElement("div");
         el.className = "group";
         el.style.backgroundImage = "url(cheers_full.png)";
         if (visitedPubs.includes(pub._id)) {
-            el.classList.add("mapboxgl-marker-semi-transparent");
-            el.classList.add("z-0");
+            el.classList.add("mapboxgl-marker-semi-transparent-opacity");
+            el.classList.add("mapboxgl-marker-semi-transparent-filter");
+            container.classList.add("z-0");
         } else {
-            el.classList.add("z-10");
-            el.classList.add("hover:z-30");
+            container.classList.add("z-10");
+            container.classList.add("hover:z-30");
         }
         el.style.width = "40px";
         el.style.height = "40px";
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const randomDegree = Math.floor(Math.random() * 360);
-            el.style.filter = `hue-rotate(${randomDegree}deg)`;
+            el.style.backgroundImage = "url(cheers_full.png)";
+            el.classList.add("animate-bounce-custom");
+            const scaledDelay =
+                ((pub.longitude - pubLongitudeRange.current.min) /
+                    (pubLongitudeRange.current.max -
+                        pubLongitudeRange.current.min)) *
+                1;
+            el.style.animationDelay = `${scaledDelay}s`;
+            el.addEventListener("animationend", (event) => {
+                if (event.animationName === "rainbow") {
+                    el.classList.remove(
+                        "mapboxgl-marker-semi-transparent-filter"
+                    );
+                }
+            });
         }
 
         const label = document.createElement("div");
@@ -337,7 +358,7 @@ export default function Map() {
             label.classList.add("group-active:opacity-100");
         }
         label.textContent = `The ${pub.name}`;
-
+        container.appendChild(el);
         el.appendChild(label);
 
         const updateLabelOpacity = () => {
@@ -355,7 +376,7 @@ export default function Map() {
         updateLabelOpacity();
 
         mapRef.current.on("zoom", updateLabelOpacity);
-        return el;
+        return container;
     };
 
     const updateVisitedStatus = (pubId) => {
