@@ -337,8 +337,7 @@ export default function Map() {
               
             const randomColor = rainbowColors[Math.floor(Math.random() * rainbowColors.length)];
             
-            el.style.color = randomColor;
-            el.innerHTML = `
+            el.outerHTML = `
             <span class="relative style="text-shadow: 1px 1px 0 ${randomColor}, -1px -1px 0 ${randomColor}, -1px 1px 0 ${randomColor}, 1px -1px 0 ${randomColor};"">
                 <span class="animate-bounce absolute inline-flex "></span>
             </span>
