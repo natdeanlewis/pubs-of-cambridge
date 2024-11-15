@@ -32,7 +32,7 @@ export default function Message({
         "Either way, what a time you've had...",
         "I'm almost sad this is all over...",
         "But I'm sure you'll find a new challenge!",
-        "Hang on, my favourite bit's nearly coming up...",
+        "Hang on, the best bit's nearly coming up...",
         "You're gonna love it, I promise...",
         "Wait for it...",
         "Oops, not quite yet...",
