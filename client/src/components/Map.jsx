@@ -327,9 +327,8 @@ export default function Map() {
             const randomDegree = Math.floor(Math.random() * 360);
             el.style.filter = `hue-rotate(${randomDegree}deg)`;
             el.innerHTML = `
-            <span class="relative flex items-center justify-center text-2xl">
-                <span class="animate-ping absolute inline-flex rounded-full">👑</span>
-                <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
+            <span class="relative flex items-center justify-center" style="backgroundImage: url(cheers_full.png)">
+                <span class="animate-bounce absolute inline-flex"></span>
             </span>
         `;
 
