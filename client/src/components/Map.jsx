@@ -324,8 +324,15 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const randomDegree = Math.floor(Math.random() * 360;
-            el.style.filter = `hue-rotate(${randomDegree}deg)`
+            const randomDegree = Math.floor(Math.random() * 360);
+            el.style.filter = `hue-rotate(${randomDegree}deg)`;
+            el.innerHTML = `
+            <span class="relative flex items-center justify-center text-2xl">
+                <span class="animate-ping absolute inline-flex rounded-full">👑</span>
+                <span class="absolute inline-flex rounded-full" style="text-shadow: 1px 1px 0 black, -1px -1px 0 black, -1px 1px 0 black, 1px -1px 0 black;">👑</span>
+            </span>
+        `;
+
         }
 
         const label = document.createElement("div");
