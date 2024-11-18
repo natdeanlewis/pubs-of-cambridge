@@ -316,12 +316,15 @@ export default function Map() {
 
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
-            if (
+            if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+                if (zoom > 13.5) {
+                    label.style.opacity = "1";
+                } else {
+                    label.style.opacity = null;
+                }
+            } else if (
                 zoom > 15.5 ||
-                (zoom > 13.5 &&
-                    (!visitedPubs.includes(pub._id) ||
-                        (pubs.length > 0 &&
-                            pubs.length === visitedPubs.length)))
+                (zoom > 13.5 && !visitedPubs.includes(pub._id))
             ) {
                 label.style.opacity = "1";
             } else {
