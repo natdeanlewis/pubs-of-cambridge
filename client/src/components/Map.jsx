@@ -39,7 +39,6 @@ export default function Map() {
     const [loading, setLoading] = useState(null);
     const [complete, setComplete] = useState(null);
     const [music, setMusic] = useState(false);
-    const [creditsMusic, setCreditsMusic] = useState(false);
     const [message, setMessage] = useState(null);
     const [loadCountRecord, setLoadCountRecord] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
@@ -225,33 +224,6 @@ export default function Map() {
         audio.play();
     };
 
-    function enableInteractions() {
-        mapRef.current.scrollZoom.enable();
-        mapRef.current.touchZoomRotate.enable();
-        mapRef.current.dragPan.enable();
-        mapRef.current.boxZoom.enable();
-        mapRef.current.keyboard.enable();
-        mapRef.current.doubleClickZoom.enable();
-    }
-
-    function cancelCredits() {
-        const credits = document.getElementById("credits");
-        credits.pause();
-        setCreditsMusic(false);
-        requestAnimationFrame(() => {
-            mapRef.current.fitBounds(INITIAL_MAP_SETTINGS.bounds);
-        });
-        enableInteractions();
-        var id = window.setTimeout(function () {}, 0);
-        while (id--) {
-            window.clearTimeout(id);
-        }
-        setMessage(null);
-        setComplete(null);
-        setRandomPub(null);
-        setNearestPub(null);
-    }
-
     useEffect(() => {
         if (!mapRef.current || !pubs) return;
 
@@ -299,7 +271,7 @@ export default function Map() {
                 );
             }
         }
-    }, [pubs, visitedPubs, creditsMusic]);
+    }, [pubs, visitedPubs]);
 
     const createMarkerElement = (pub) => {
         const container = document.createElement("div");
@@ -319,24 +291,20 @@ export default function Map() {
         el.style.backgroundSize = "100%";
         el.style.cursor = "pointer";
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
-            if (creditsMusic) {
-                el.classList.remove("mapboxgl-marker-semi-transparent-filter");
-            } else {
-                el.classList.add("animate-bounce-custom");
-                const scaledDelay =
-                    ((pub.longitude - pubLongitudeRange.current.min) /
-                        (pubLongitudeRange.current.max -
-                            pubLongitudeRange.current.min)) *
-                    1;
-                el.style.animationDelay = `${scaledDelay}s`;
-                el.addEventListener("animationend", (event) => {
-                    if (event.animationName === "rainbow") {
-                        el.classList.remove(
-                            "mapboxgl-marker-semi-transparent-filter"
-                        );
-                    }
-                });
-            }
+            el.classList.add("animate-bounce-custom");
+            const scaledDelay =
+                ((pub.longitude - pubLongitudeRange.current.min) /
+                    (pubLongitudeRange.current.max -
+                        pubLongitudeRange.current.min)) *
+                1;
+            el.style.animationDelay = `${scaledDelay}s`;
+            el.addEventListener("animationend", (event) => {
+                if (event.animationName === "rainbow") {
+                    el.classList.remove(
+                        "mapboxgl-marker-semi-transparent-filter"
+                    );
+                }
+            });
         }
 
         const label = document.createElement("div");
@@ -371,9 +339,6 @@ export default function Map() {
     };
 
     const updateVisitedStatus = (pubId) => {
-        if (creditsMusic) {
-            cancelCredits();
-        }
         const localVisitedPubs = JSON.parse(
             localStorage.getItem("visited_pub_ids")
         );
@@ -416,8 +381,6 @@ export default function Map() {
                 pubs={pubs}
                 visitedPubs={visitedPubs}
                 music={music}
-                creditsMusic={creditsMusic}
-                cancelCredits={cancelCredits}
                 randomPub={randomPub}
                 setComplete={setComplete}
                 setRandomPub={setRandomPub}
@@ -425,7 +388,6 @@ export default function Map() {
                 setMessage={setMessage}
                 setLoading={setLoading}
                 setMusic={setMusic}
-                setCreditsMusic={setCreditsMusic}
                 playSound={playSound}
                 map={mapRef.current}
                 INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS}
@@ -441,8 +403,6 @@ export default function Map() {
                 nearestPub={nearestPub}
                 complete={complete}
                 loading={loading}
-                creditsMusic={creditsMusic}
-                cancelCredits={cancelCredits}
                 setMessage={setMessage}
                 setLoading={setLoading}
                 setComplete={setComplete}
