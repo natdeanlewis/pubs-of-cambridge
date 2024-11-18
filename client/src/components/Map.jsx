@@ -31,7 +31,7 @@ export default function Map() {
     const mapContainerRef = useRef();
     const markers = useRef([]);
     const pubLongitudeRange = useRef({});
-    const firstTime = useRef(true);
+    const firstApplause = useRef(true);
 
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
@@ -204,24 +204,22 @@ export default function Map() {
     }, [loadCountRecord]);
 
     useEffect(() => {
-        if (pubs.length > 0 && pubs.length != visitedPubs.length) {
+        if (pubs.length != visitedPubs.length) {
             return;
         } else {
-            if (firstTime.current && music) {
+            if (music && firstApplause.current) {
                 const audio = document.getElementById("music");
                 audio.pause();
                 playSound("fanfare.mp3");
                 playSound("applause.mp3");
 
                 setMusic(false);
+                firstApplause.current = false;
 
                 setTimeout(() => {
                     audio.play();
                     setMusic(true);
                 }, 3000);
-                if (firstTime.current) {
-                    firstTime.current = false;
-                }
             }
         }
     }, [visitedPubs, music]);
@@ -309,6 +307,8 @@ export default function Map() {
                     );
                 }
             });
+        } else if (pubs.length > 0 && pubs.length === visitedPubs.length) {
+            el.classList.remove("mapboxgl-marker-semi-transparent-filter");
         }
 
         const label = document.createElement("div");
