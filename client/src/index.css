@@ -31,6 +31,11 @@
   }
 }
 
+.mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib {
+  margin-bottom: env(safe-area-inset-bottom) !important;
+}
+
+
 .safe-area {
     margin-top: env(safe-area-inset-top);
     margin-right: env(safe-area-inset-right);
