@@ -234,7 +234,6 @@ export default function Map() {
             min: Math.min(...longitudes),
             max: Math.max(...longitudes),
         };
-
         pubs.forEach((pub) => {
             const el = createMarkerElement(pub);
             const marker = new mapboxgl.Marker(el)
@@ -246,9 +245,7 @@ export default function Map() {
                 updateVisitedStatus(pub._id);
             });
         });
-        setComplete(
-            pubs.length > 0 && pubs.length === visitedPubs.length
-        );
+        setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
         setNearestPub(null);
         setRandomPub(null);
         if (pubs.length > 0 && pubs.length === visitedPubs.length) {
