@@ -31,6 +31,7 @@ export default function Map() {
     const mapContainerRef = useRef();
     const markers = useRef([]);
     const pubLongitudeRange = useRef({});
+    const firstTime = useRef(true);
 
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
@@ -203,17 +204,25 @@ export default function Map() {
     }, [loadCountRecord]);
 
     useEffect(() => {
-        if (music && pubs.length > 0 && pubs.length === visitedPubs.length) {
-            const audio = document.getElementById("music");
-            audio.pause();
-            playSound("fanfare.mp3");
-            playSound("applause.mp3");
+        if (pubs.length > 0 && pubs.length != visitedPubs.length) {
+            return;
+        } else {
+            if (firstTime.current && music) {
+                const audio = document.getElementById("music");
+                audio.pause();
+                playSound("fanfare.mp3");
+                playSound("applause.mp3");
 
-            setMusic(false);
-            setTimeout(() => {
-                audio.play();
-                setMusic(true);
-            }, 3000);
+                setMusic(false);
+
+                setTimeout(() => {
+                    audio.play();
+                    setMusic(true);
+                }, 3000);
+                if (firstTime.current) {
+                    firstTime.current = false;
+                }
+            }
         }
     }, [visitedPubs, music]);
 
@@ -309,24 +318,44 @@ export default function Map() {
             label.classList.add("group-hover:opacity-100");
         }
         label.textContent = `The ${pub.name}`;
+
         container.appendChild(el);
         el.appendChild(label);
+
+        const info = document.createElement("a");
+        info.className =
+            "absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 font-serif italic";
+        if (!visitedPubs.includes(pub._id)) {
+            info.classList.add("group-hover:opacity-100");
+        }
+        info.textContent = `Open in maps`;
+        info.target = "_blank";
+        container.appendChild(el);
+        el.appendChild(info);
 
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
             if (pubs.length > 0 && pubs.length === visitedPubs.length) {
                 if (zoom > 13.5) {
                     label.style.opacity = "1";
+                    info.style.opacity = "1";
+                    info.style.href = "https://www.google.com";
                 } else {
                     label.style.opacity = null;
+                    info.style.opacity = null;
+                    info.removeAttribute("href");
                 }
             } else if (
                 zoom > 15.5 ||
                 (zoom > 13.5 && !visitedPubs.includes(pub._id))
             ) {
                 label.style.opacity = "1";
+                info.style.opacity = "1";
+                info.style.href = "https://www.google.com";
             } else {
                 label.style.opacity = null;
+                info.style.opacity = null;
+                info.removeAttribute("href");
             }
         };
 
