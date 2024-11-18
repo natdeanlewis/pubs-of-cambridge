@@ -9,8 +9,6 @@ export default function Message({
     setMessage,
     setLoading,
     setComplete,
-    INITIAL_MAP_SETTINGS,
-    map,
 }) {
     useEffect(() => {
         if (randomPub) {
@@ -28,13 +26,15 @@ export default function Message({
             setMessage(null);
         }
 
-        const messageTimeout = setTimeout(() => {
-            setMessage(null);
-            setComplete(null);
-        }, 5000);
-        return () => {
-            clearTimeout(messageTimeout);
-        };
+        if (!complete) {
+            const messageTimeout = setTimeout(() => {
+                setMessage(null);
+                setComplete(null);
+            }, 5000);
+            return () => {
+                clearTimeout(messageTimeout);
+            };
+        }
     }, [randomPub, nearestPub, complete, loading]);
 
     return (

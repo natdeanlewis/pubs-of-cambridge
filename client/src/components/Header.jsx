@@ -19,10 +19,11 @@ export default function Header({
 }) {
     const handleResetViewClick = () => {
         playSound("zoom_out.mp3");
-        setComplete(null);
         setRandomPub(null);
         setNearestPub(null);
-        setMessage(null);
+        if (!(pubs.length > 0 && pubs.length === visitedPubs.length)) {
+            setMessage(null);
+        }
         map.fitBounds(INITIAL_MAP_SETTINGS.bounds);
     };
 
@@ -86,11 +87,11 @@ export default function Header({
     }
 
     const handleNearestPubClick = () => {
-        setComplete(null);
         setRandomPub(null);
         const complete = pubs.length > 0 && pubs.length === visitedPubs.length;
+        setComplete(complete);
         if (complete) {
-            return setComplete(true);
+            return;
         }
         if (pubs.length === 0) return;
 
