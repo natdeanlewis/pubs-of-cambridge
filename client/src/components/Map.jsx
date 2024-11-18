@@ -247,7 +247,7 @@ export default function Map() {
             });
         });
         setComplete(
-            !firstTime && pubs.length > 0 && pubs.length === visitedPubs.length
+            pubs.length > 0 && pubs.length === visitedPubs.length
         );
         setNearestPub(null);
         setRandomPub(null);
