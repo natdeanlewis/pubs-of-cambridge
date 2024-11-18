@@ -1,8 +1,6 @@
 import Button from "./Button";
 import Total from "./Total";
 import Music from "./Music";
-import { Capacitor } from "@capacitor/core";
-import { Geolocation } from "@capacitor/geolocation";
 
 export default function Header({
     pubs,
@@ -133,58 +131,28 @@ export default function Header({
         }
         if (pubs.length === 0) return;
 
-        const showNearestPubApp = (position) => {
-            const nearestPub = calculateNearestPub(position);
-            playSound("door.mp3");
+        if (navigator.geolocation) {
+            setLoading(true);
 
-            if (nearestPub) {
-                map.flyTo({
-                    center: [nearestPub.longitude, nearestPub.latitude],
-                    zoom: 16,
-                });
-            }
-        };
-        const getPositionAndCalculateNearestPubApp = async () => {
-            const position = await Geolocation.getCurrentPosition();
-            if (position) {
-                setLoading(true);
-                showNearestPubApp(position);
-            } else {
-                console.error("Error getting location:", error);
-                alert(
-                    "Share your location to enable finding your nearest unvisited pub"
-                );
-            }
-        };
-        if (Capacitor.getPlatform() === "web") {
-            if (navigator.geolocation) {
-                setLoading(true);
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const nearestPub = calculateNearestPub(position);
+                    playSound("door.mp3");
 
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const nearestPub = calculateNearestPub(position);
-                        playSound("door.mp3");
-
-                        if (nearestPub) {
-                            map.flyTo({
-                                center: [
-                                    nearestPub.longitude,
-                                    nearestPub.latitude,
-                                ],
-                                zoom: 16,
-                            });
-                        }
-                    },
-                    (error) => {
-                        console.error("Error getting location:", error);
-                        alert(
-                            "Share your location to enable finding your nearest unvisited pub"
-                        );
+                    if (nearestPub) {
+                        map.flyTo({
+                            center: [nearestPub.longitude, nearestPub.latitude],
+                            zoom: 16,
+                        });
                     }
-                );
-            }
-        } else {
-            getPositionAndCalculateNearestPubApp();
+                },
+                (error) => {
+                    console.error("Error getting location:", error);
+                    alert(
+                        "Share your location to enable finding your nearest unvisited pub"
+                    );
+                }
+            );
         }
     };
 
