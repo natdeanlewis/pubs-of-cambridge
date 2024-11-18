@@ -370,7 +370,10 @@ export default function Map() {
             const zoom = mapRef.current.getZoom();
             if (
                 zoom > 15.5 ||
-                (zoom > 13.5 && !visitedPubs.includes(pub._id))
+                (zoom > 13.5 &&
+                    (!visitedPubs.includes(pub._id) ||
+                        (pubs.length > 0 &&
+                            pubs.length === visitedPubs.length)))
             ) {
                 label.style.opacity = "1";
             } else {
