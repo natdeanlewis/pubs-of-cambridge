@@ -31,12 +31,8 @@
   }
 }
 
-.mapboxgl-ctrl-logo, .mapboxgl-ctrl-icon {
-  margin-top: env(safe-area-inset-top) !important;
-  margin-right: env(safe-area-inset-right) !important;
+.mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right {
   margin-bottom: env(safe-area-inset-bottom) !important;
-  margin-left: env(safe-area-inset-left) !important;
-
 }
 
 
