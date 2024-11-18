@@ -393,7 +393,7 @@ export default function Map() {
     };
 
     return (
-        <div className="relative h-dvh">
+        <div className="relative h-screen">
             {initializing && (
                 <div className="fixed inset-0 bg-yellow-950 z-50 flex items-center justify-center">
                     <div
