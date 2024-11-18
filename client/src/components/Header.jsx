@@ -18,7 +18,9 @@ export default function Header({
     INITIAL_MAP_SETTINGS,
 }) {
     const handleResetViewClick = () => {
-        playSound("zoom_out.mp3");
+        if (music) {
+            playSound("zoom_out.mp3");
+        }
         setRandomPub(null);
         setNearestPub(null);
         if (!(pubs.length > 0 && pubs.length === visitedPubs.length)) {
@@ -32,8 +34,9 @@ export default function Header({
         setRandomPub(null);
         setMessage(null);
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
-
-        playSound("die_roll.mp3");
+        if (music) {
+            playSound("die_roll.mp3");
+        }
         let unvisitedPubs = pubs.filter(
             (pub) => !visitedPubs.includes(pub._id)
         );
@@ -101,8 +104,9 @@ export default function Header({
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const nearestPub = calculateNearestPub(position);
-                    playSound("door.mp3");
-
+                    if (music) {
+                        playSound("door.mp3");
+                    }
                     if (nearestPub) {
                         map.flyTo({
                             center: [nearestPub.longitude, nearestPub.latitude],
@@ -127,13 +131,13 @@ export default function Header({
             "🎲 Recommends a random unvisited pub\n" +
             "📍 Finds your nearest unvisited pub\n" +
             "🏠 Resets the view\n" +
-            "🎶/⏸️ Toggles the music";
+            "🎶/⏸️ Toggles the music and sound effects";
 
         if (pubs.length > 0 && visitedPubs.length === pubs.length) {
             alert_string =
                 "Congratulations, you've visited every pub in Cambridge!\n\n" +
                 "🏠 Resets the view\n" +
-                "🎶/⏸️ Toggles the music";
+                "🎶/⏸️ Toggles the music and sound effects";
         }
         alert(alert_string);
     };

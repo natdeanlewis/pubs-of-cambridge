@@ -42,7 +42,6 @@ export default function Map() {
     const [message, setMessage] = useState(null);
     const [loadCountRecord, setLoadCountRecord] = useState(null);
     const [userPosition, setUserPosition] = useState(null);
-    const [firstTime, setFirstTime] = useState(true);
     const [initializing, setInitializing] = useState(true);
 
     function newEncryptedApiKey() {
@@ -204,20 +203,19 @@ export default function Map() {
     }, [loadCountRecord]);
 
     useEffect(() => {
-        if (
-            !firstTime &&
-            pubs.length > 0 &&
-            pubs.length === visitedPubs.length
-        ) {
+        if (music && pubs.length > 0 && pubs.length === visitedPubs.length) {
             const audio = document.getElementById("music");
-            if (music) {
-                audio.pause();
-                setMusic(!music);
-            }
+            audio.pause();
             playSound("fanfare.mp3");
             playSound("applause.mp3");
+
+            setMusic(false);
+            setTimeout(() => {
+                audio.play();
+                setMusic(true);
+            }, 3000);
         }
-    }, [visitedPubs]);
+    }, [visitedPubs, music]);
 
     const playSound = (file) => {
         const audio = new Audio(file);
@@ -268,7 +266,7 @@ export default function Map() {
                 );
             }
         }
-    }, [pubs, visitedPubs]);
+    }, [pubs, visitedPubs, music]);
 
     const createMarkerElement = (pub) => {
         const container = document.createElement("div");
@@ -346,15 +344,17 @@ export default function Map() {
         let newVisitedPubs;
         if (method === "remove") {
             newVisitedPubs = localVisitedPubs.filter((id) => id !== pubId);
-            playSound("glass_break.mp3");
+            if (music) {
+                playSound("glass_break.mp3");
+            }
         } else {
             newVisitedPubs = [...localVisitedPubs, pubId];
-            playSound("glass_clink.mp3");
+            if (music) {
+                playSound("glass_clink.mp3");
+            }
         }
         localStorage.setItem("visited_pub_ids", JSON.stringify(newVisitedPubs));
         setVisitedPubs(newVisitedPubs);
-
-        setFirstTime(false);
     };
 
     return (
