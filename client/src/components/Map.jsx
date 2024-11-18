@@ -322,40 +322,21 @@ export default function Map() {
         container.appendChild(el);
         el.appendChild(label);
 
-        const info = document.createElement("a");
-        info.className =
-            "absolute bottom-[-30px] left-1/2 transform -translate-x-1/2 bg-amber-100 px-1 rounded shadow text-xs whitespace-nowrap opacity-0 transition-opacity duration-300 font-serif italic";
-        if (!visitedPubs.includes(pub._id)) {
-            info.classList.add("group-hover:opacity-100");
-        }
-        info.textContent = `Open in maps`;
-        info.target = "_blank";
-        container.appendChild(el);
-        el.appendChild(info);
-
         const updateLabelOpacity = () => {
             const zoom = mapRef.current.getZoom();
             if (pubs.length > 0 && pubs.length === visitedPubs.length) {
                 if (zoom > 13.5) {
                     label.style.opacity = "1";
-                    info.style.opacity = "1";
-                    info.style.href = "https://www.google.com";
                 } else {
                     label.style.opacity = null;
-                    info.style.opacity = null;
-                    info.removeAttribute("href");
                 }
             } else if (
                 zoom > 15.5 ||
                 (zoom > 13.5 && !visitedPubs.includes(pub._id))
             ) {
                 label.style.opacity = "1";
-                info.style.opacity = "1";
-                info.style.href = "https://www.google.com";
             } else {
                 label.style.opacity = null;
-                info.style.opacity = null;
-                info.removeAttribute("href");
             }
         };
 
