@@ -26,6 +26,19 @@ export default function UserMarker({ longitude, latitude, map }) {
             .setLngLat([longitude, latitude])
             .addTo(map);
 
+        const updateLabelOpacity = () => {
+            const zoom = map.getZoom();
+            if (zoom > 15.5) {
+                label.style.opacity = "1";
+            } else {
+                label.style.opacity = null;
+            }
+        };
+
+        updateLabelOpacity();
+
+        map.on("zoom", updateLabelOpacity);
+
         return () => {
             userMarker.remove();
         };
