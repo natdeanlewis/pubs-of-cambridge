@@ -6,6 +6,7 @@
   opacity: 1;
   clip-path: inset(100% 0 0 0);
   animation: reveal 1.5s ease-in-out forwards infinite;
+  animation-delay: -0.45s;
 }
 
 .loading-image-background {
@@ -14,19 +15,19 @@
 
 @keyframes reveal {
   0% {
+    clip-path: inset(20% 0 0 0);
+  }
+  5% {
+    clip-path: inset(20% 0 0 0);
+  }
+  30% {
     clip-path: inset(100% 0 0 0);
   }
-  60% {
-    clip-path: inset(20% 0 0 0);
-  }
-  65% {
-    clip-path: inset(20% 0 0 0);
-  }
-  90% {
+  40% {
     clip-path: inset(100% 0 0 0);
   }
   100% {
-    clip-path: inset(100% 0 0 0);
+    clip-path: inset(20% 0 0 0);
   }
 }
 
