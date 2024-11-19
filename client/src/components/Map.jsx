@@ -368,7 +368,7 @@ export default function Map() {
     };
 
     return (
-        <div className="relative h-dvh">
+        <div className="relative custom-height">
             {initializing && (
                 <div className="fixed inset-0 bg-yellow-950 z-50 flex items-center justify-center">
                     <div
@@ -405,7 +405,11 @@ export default function Map() {
                 INITIAL_LONGITUDE={INITIAL_LONGITUDE}
             />
 
-            <div id="map-container" className="h-dvh" ref={mapContainerRef} />
+            <div
+                id="map-container"
+                className="dynamic-height"
+                ref={mapContainerRef}
+            />
 
             <Message
                 message={message}

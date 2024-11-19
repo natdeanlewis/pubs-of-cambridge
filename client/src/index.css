@@ -73,3 +73,17 @@
 .animate-bounce-custom {
   animation: rainbow 3s, custom-bounce 1s 3;
 }
+
+:root {
+  --custom-height: 100dvh;
+}
+
+@media (display-mode: standalone) {
+  :root {
+    --custom-height: 100vh;
+  }
+}
+
+.dynamic-height {
+  height: var(--custom-height);
+}
