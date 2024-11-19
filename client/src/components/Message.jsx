@@ -40,7 +40,7 @@ export default function Message({
     return (
         <div>
             {message && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 text-center bottom-12 sm:top-12 sm:bottom-auto w-full sm:w-auto max-w-[75%] z-40">
+                <div className="absolute left-1/2 transform -translate-x-1/2 text-center bottom-12 sm:top-12 sm:bottom-auto w-full sm:w-auto max-w-[75%] z-40 safe-area">
                     <div className="bg-amber-100 shadow my-8 py-2 px-4 rounded text-neutral-800 font-bold font-serif italic text-balance">
                         {message}
                     </div>
