@@ -370,7 +370,7 @@ export default function Map() {
     return (
         <div className="relative custom-height">
             {initializing && (
-                <div className="fixed inset-0 bg-yellow-950 z-50 flex items-center justify-center">
+                <div className="fixed inset-0 bg-yellow-950 z-[60] flex items-center justify-center">
                     <div
                         id="loading-image-container"
                         className="relative w-32 h-32 loading-image-container"
