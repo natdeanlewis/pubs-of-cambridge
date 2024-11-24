@@ -171,7 +171,7 @@ export default function Header({
                 <Button label="ℹ️" handleClickAction={handleInfoClick} />
             </div>
 
-            <Music id="music" loop={true} src="lute.mp3" />
+            <Music id="music" src="lute.mp3" />
         </div>
     );
 }
