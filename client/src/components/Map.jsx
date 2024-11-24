@@ -31,7 +31,6 @@ export default function Map() {
     const mapContainerRef = useRef();
     const markers = useRef([]);
     const pubLongitudeRange = useRef({});
-    const firstApplause = useRef(true);
 
     const [pubs, setPubs] = useState([]);
     const [visitedPubs, setVisitedPubs] = useState([]);
@@ -204,32 +203,6 @@ export default function Map() {
     }, [loadCountRecord]);
 
     useEffect(() => {
-        if (pubs.length != visitedPubs.length) {
-            return;
-        } else {
-            if (music && firstApplause.current) {
-                const audio = document.getElementById("music");
-                audio.pause();
-                playSound("fanfare.mp3");
-                playSound("applause.mp3");
-
-                setMusic(false);
-                firstApplause.current = false;
-
-                setTimeout(() => {
-                    audio.play();
-                    setMusic(true);
-                }, 3000);
-            }
-        }
-    }, [visitedPubs, music]);
-
-    const playSound = (file) => {
-        const audio = new Audio(file);
-        audio.play();
-    };
-
-    useEffect(() => {
         if (!mapRef.current || !pubs) return;
 
         markers.current.forEach((marker) => marker.remove());
@@ -273,7 +246,7 @@ export default function Map() {
                 );
             }
         }
-    }, [pubs, visitedPubs, music]);
+    }, [pubs, visitedPubs]);
 
     const createMarkerElement = (pub) => {
         const container = document.createElement("div");
@@ -354,14 +327,8 @@ export default function Map() {
         let newVisitedPubs;
         if (method === "remove") {
             newVisitedPubs = localVisitedPubs.filter((id) => id !== pubId);
-            if (music) {
-                playSound("glass_break.mp3");
-            }
         } else {
             newVisitedPubs = [...localVisitedPubs, pubId];
-            if (music) {
-                playSound("glass_clink.mp3");
-            }
         }
         localStorage.setItem("visited_pub_ids", JSON.stringify(newVisitedPubs));
         setVisitedPubs(newVisitedPubs);
@@ -398,7 +365,6 @@ export default function Map() {
                 setMessage={setMessage}
                 setLoading={setLoading}
                 setMusic={setMusic}
-                playSound={playSound}
                 map={mapRef.current}
                 INITIAL_MAP_SETTINGS={INITIAL_MAP_SETTINGS}
                 INITIAL_LATITUDE={INITIAL_LATITUDE}

@@ -13,14 +13,10 @@ export default function Header({
     setMessage,
     setLoading,
     setMusic,
-    playSound,
     map,
     INITIAL_MAP_SETTINGS,
 }) {
     const handleResetViewClick = () => {
-        if (music) {
-            playSound("zoom_out.mp3");
-        }
         setRandomPub(null);
         setNearestPub(null);
         if (!(pubs.length > 0 && pubs.length === visitedPubs.length)) {
@@ -34,9 +30,6 @@ export default function Header({
         setRandomPub(null);
         setMessage(null);
         setComplete(pubs.length > 0 && pubs.length === visitedPubs.length);
-        if (music) {
-            playSound("die_roll.mp3");
-        }
         let unvisitedPubs = pubs.filter(
             (pub) => !visitedPubs.includes(pub._id)
         );
@@ -104,9 +97,6 @@ export default function Header({
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const nearestPub = calculateNearestPub(position);
-                    if (music) {
-                        playSound("door.mp3");
-                    }
                     if (nearestPub) {
                         map.flyTo({
                             center: [nearestPub.longitude, nearestPub.latitude],
