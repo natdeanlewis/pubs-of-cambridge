@@ -10,15 +10,15 @@ The platform combines location data, pub information, and personal progress trac
 
 **Interactive map** displaying all pubs across Cambridge that keeps track of visited and unvisited pubs:
 
-<img src="home.png" alt="home page" height="400">
+<img src="public/home.png" alt="home page" height="400">
 
 **Random pub recommendation** for spontaneous exploration:
 
-<img src="random.png" alt="random pub recommendation" height="400">
+<img src="public/random.png" alt="random pub recommendation" height="400">
 
 **Nearest unvisited pub finder** based on the user's location:
 
-<img src="nearest.png" alt="nearest pub recommendation" height="400">
+<img src="public/nearest.png" alt="nearest pub recommendation" height="400">
 
 ---
 
