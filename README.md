@@ -8,12 +8,16 @@ The platform combines location data, pub information, and personal progress trac
 
 ### Key Features
 
-* **Interactive map** displaying all pubs across Cambridge that keeps track of visited and unvisited pubs
-* **Random pub recommendation** for spontaneous exploration
-* **Nearest unvisited pub finder** based on the user's location
+**Interactive map** displaying all pubs across Cambridge that keeps track of visited and unvisited pubs:
 
 <img src="home.png" height="400">
+
+**Random pub recommendation** for spontaneous exploration:
+
 <img src="random.png" height="400">
+
+**Nearest unvisited pub finder** based on the user's location:
+
 <img src="nearest.png" height="400">
 
 ---
