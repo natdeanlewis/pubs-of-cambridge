@@ -25,6 +25,7 @@ The platform combines location data, pub information, and personal progress trac
 # Environment Configuration
 
 Two environment files are required for local development: `/client/.env` and `/server/.env.server`
+
 Sample versions of both files are included in the repository.
 
 ---
