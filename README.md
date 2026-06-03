@@ -1,30 +1,52 @@
--   config:
+# Pubs of Cambridge
 
-2 files are needed, config.env in root, and .env in /client, there's a sample for each
+## Project Overview
 
--   local dev:
+Pubs of Cambridge is a full-stack web application built with **React**, **Node.js/Express**, and **MongoDB** that helps users discover and track every pub in Cambridge through an interactive map-based experience.
 
-run client locally from /client:
+The platform combines location data, pub information, and personal progress tracking to create a digital pub checklist for Cambridge residents, students, and visitors.
 
+### Key Features
+
+* **Interactive map** displaying all pubs across Cambridge that keeps track of visited and unvisited pubs ![home.png](home.png)
+* **Random pub recommendation** for spontaneous exploration ![random.png](random.png)
+* **Nearest unvisited pub finder** based on the user's location ![nearest.png](nearest.png)
+
+---
+
+# Environment Configuration
+
+Two environment files are required for local development: `/client/.env` and `/server/.env.server`
+Sample versions of both files are included in the repository.
+
+---
+
+# Local Development
+
+### Frontend
+
+From the `/client` directory:
+
+```bash
 npm run dev
+```
 
-run db server locally from /server:
+### Backend
 
+From the `/server` directory:
+
+```bash
 node --env-file=.env.server server
+```
 
--   prod:
+---
 
-express backend is hosted on render at https://pub-map.onrender.com/ (note no port 5050)
-react frontend is hosted on vercel at https://pubsofcambridge.vercel.app/
+# Production Deployment
 
--   misc:
+### Frontend
 
-counts calls to mapbox to avoid exceeding the limit. currently not doing this monthly, so must be reset in mongodb to the current month's calls (from mapbox dashboard) if we exceed the limit
+https://pubsofcambridge.vercel.app/
 
-an uptime robot http monitor sends a request to the render server every 10 mins to stop it spinning down https://dashboard.uptimerobot.com/monitors/797982851
+### Backend API
 
-we use an RSA private/public key pair to encrypt the API_KEY with the requests to the backend and authenticate that they aren't coming from a malicious user.
-
-for remote debugging, use
-npm run dev -- --host
-and replace localhost in the .env and config.env with your local IP
+https://pub-map.onrender.com/
